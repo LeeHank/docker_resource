@@ -1,0 +1,659 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>CH7: Dockerfile</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="afb2fe02-1b6e-492f-a4ee-9d6d91ba8c7e" class="page sans"><header><h1 class="page-title">CH7: Dockerfile</h1></header><div class="page-body"><h2 id="1e5a0ea6-ed5a-443d-94f4-20e44ffb4305" class="">7.1 觀念解說</h2><p id="f484a815-f18a-49bc-ad73-8318dcdd7c61" class="">
+</p><figure id="1b9975ea-0503-43c5-83ed-0ec14130f3d7" class="image"><a href="CH7%20Dockerfile%20afb2fe021b6e492fa4ee9d6d91ba8c7e/7_1_Dockerfile.jpg"><img style="width:739px" src="CH7%20Dockerfile%20afb2fe021b6e492fa4ee9d6d91ba8c7e/7_1_Dockerfile.jpg"/></a></figure><ul id="24348afa-c334-42a2-9e76-c1aabc6316d2" class="bulleted-list"><li style="list-style-type:disc">首先看最下面的，MacOS，也就是我們的主機。</li></ul><ul id="32028d4d-4bb3-4d27-ab95-7cab5fc86405" class="bulleted-list"><li style="list-style-type:disc">接著，左手邊那個block，藍色的docker client，就是我們mac上灌來跑docker的terminal，例如我的筆電是mac，然後我的docker desktop就是一個docker client，我只要開啟docker desktop服務後，我就可以在terminal下<code>docker blabla...</code>的指令。所以當我在terminal上下<code>docker</code>指令時，我就是利用<code>Docker Client</code>這個工作者在做事。</li></ul><ul id="740bdba9-62b7-4ade-8027-c33373b11993" class="bulleted-list"><li style="list-style-type:disc">再來，往上看到綠色的<code>build context</code>這層，這是指，當我下<code>docker build .</code>這個指令要去build image時，這時執行指令的這層目錄(i.e. <code>.</code>這個目錄)，會被稱作build context。而這層目錄中，一定會有<code>Dockerfile</code>這個檔案，以及其他我們要使用的檔案(e.g. Other Files)。特別注意，這些檔案都是存在於Mac的硬碟中。</li></ul><ul id="79668bc3-3380-4326-8434-de03b61d6593" class="bulleted-list"><li style="list-style-type:disc">接著看右邊的Linux OS (VM)這塊。這塊是在講，我們在Mac上，用VM架了一個Linux OS，然後在Linux OS上安裝一個docker engine。所有在<code>Docker Client</code>中下的docker指令，都會傳到<code>Docket Engine</code>。所以剛剛我們下了<code>docker build .</code>的指令，也會傳遞到<code>Docker Engine</code>。當Docker Engine接受到<code>docker build .</code>的指令後，就會把左邊的build context(也就是mac上要拿來build image的那個資料夾)，copy一份，到Linux的硬碟中。所以就會看到<code>copied context</code>這一層。這一層就是copy過來的資料夾，裡面就會有Dockerfile和Other Files這些檔案。</li></ul><ul id="3be79bc2-a79f-4054-8047-ff1deecfef73" class="bulleted-list"><li style="list-style-type:disc">在這邊先打住一下。目前我們已經看到兩個作業系統，兩個工作者，以及兩個空間：<ul id="9c07927c-6ac3-4dc6-92e1-92581a50fea8" class="bulleted-list"><li style="list-style-type:circle">作業系統： 左圖是在Mac OS下，但右圖是在Linux OS下</li></ul><ul id="f5dd21d3-da9f-4307-ba52-691b50f110b5" class="bulleted-list"><li style="list-style-type:circle">工作者： 左圖的工作者叫<code>Docker Client</code>，右圖的工作者叫<code>Docker Engine</code></li></ul><ul id="d461992a-1f76-4883-a651-138f898f6cde" class="bulleted-list"><li style="list-style-type:circle">空間： 左圖的檔案(i.e. Dockerfile, Other Files)，是放在Mac硬碟下。右圖的檔案，是放在Linux這個虛擬機的硬碟空間下(還不是container喔，就真的是放在Linux的硬碟下)</li></ul></li></ul><ul id="2d7fe05a-e1ee-4de1-9e85-be23ba6b2b99" class="bulleted-list"><li style="list-style-type:disc">另外，講到現在，都是假設我們的筆電是mac，然後我用docker desktop在做事，所看到的架構。但如果今天是在公司，那我其實根本不管筆電是Mac or Windows，我們都是直接進到linux server (e.g. 我們在windows上，會用putty登入linux server，然後就直接在這個server下下指令做事了)。如果是這樣的話，那我會把我要build image的檔案，直接放在linux中的某個資料夾中，所以現在這張圖，我可以把左邊全部砍掉不要看。然後中間的<code>Copied Context</code>，把它改成<code>Build Context</code>即可。</li></ul><ul id="405d4c53-3ee6-4d2b-9d9d-51afc909479d" class="bulleted-list"><li style="list-style-type:disc">再貼一次圖，再繼續講</li></ul><figure id="e594277c-d5b9-4531-96a9-b69e513cea0c" class="image"><a href="CH7%20Dockerfile%20afb2fe021b6e492fa4ee9d6d91ba8c7e/7_1_Dockerfile%201.jpg"><img style="width:739px" src="CH7%20Dockerfile%20afb2fe021b6e492fa4ee9d6d91ba8c7e/7_1_Dockerfile%201.jpg"/></a></figure><ul id="0f114cd2-aef4-46a3-9b14-8b67b5003398" class="bulleted-list"><li style="list-style-type:disc">接著，我們要看到最右邊了。這邊要開始講Docker Engine如何去執行Dockerfile中的指令。</li></ul><ul id="bcbf69e5-fe5c-4694-a748-635f9353d862" class="bulleted-list"><li style="list-style-type:disc">我們首先看到第一個Dockerfile command，這邊是指，Docker Engine去讀Dockerfile時，第一行會讀到的Command，一定都是<code>FROM ...</code>，這是用來找base image用的。例如這邊的<code>FROM alpine:latest</code>，就是要去取最新版本的alpine這個image(alpine是一種linux作業系統，你就把它想成和centOS一樣的東西，都是linux OS)。Docker engine抓完後，就會建立紅色這層Base image，並開啟一個臨時用的container，我們就叫他tmp Container01，這個container會以這個base image為內容起起來。</li></ul><ul id="e8e16522-2408-46e0-b1f9-368759a10d21" class="bulleted-list"><li style="list-style-type:disc">再來，Docker Engine就會去讀Dockerfile的第二行指令，例如這邊的<code>RUN touch file001.txt</code>，就是要開一個叫做file001.txt的檔案。</li></ul><ul id="112780aa-edbb-4d85-9002-a93bc422a017" class="bulleted-list"><li style="list-style-type:disc">這邊提醒一下，在Dockerfile中，重要的指令(e.g. 這邊的<code>RUN</code>)，都會在原本的container上再加一個layer，也就是這邊的<code>tmp image01</code>這個新layer。簡單來想就是，我本來先引入base image(也就是乾淨的alpine Linux OS)，那現在就是更新image，這個image是alpine Linux OS，加上裡面已經有file001.txt這個檔案的狀態。</li></ul><ul id="d687809f-c2f9-408d-945d-c03bc31283da" class="bulleted-list"><li style="list-style-type:disc">那更新完image後，就會再加上一個container，來繼續run dockerfile後面的指令，所以就看到了<code>tmp Container02</code>這個container。</li></ul><ul id="8014f139-8750-4538-b1de-b5bc64d53b5a" class="bulleted-list"><li style="list-style-type:disc">接著run Dockerfile第三行指令，<code>COPY /src /dst</code>。這邊的<code>/src</code>指的是<code>Copied Context</code>，他是存在於linux虛擬機上的硬碟空間。<code>/dst</code>是指<code>tmp Container02</code>，他是Docker Engine正在建立image時，開起來的container空間。所以這邊我們改用<code>imported files</code>這個字。</li></ul><ul id="0530276d-0253-45c4-a4ab-ae607da9e0e5" class="bulleted-list"><li style="list-style-type:disc">有了這些檔案後，我就又可以更新我的image了，所以現在更新完的image，我叫做<code>tmp image02</code></li></ul><ul id="f6a560fc-e76e-4d63-aec9-eeeba9422c73" class="bulleted-list"><li style="list-style-type:disc">有了新的image，他就又會開啟一個container，然後繼續讀Dockerfile的下一行command。讀到<code>ENTRYPOINT [&quot;httpd&quot;]</code>。<code>ENTRYPOINT</code>通常是dockerfile的最後一行指令了，他在幹麻現在先不介紹，但總之有了這個指令，Docker Engine就又會更新image，而這個image已經是最終版了，所以叫他<code>final image</code>。那就完成image的建置。</li></ul><ul id="9d94bf3e-7c36-487f-89c3-f70eb8cdaf6d" class="bulleted-list"><li style="list-style-type:disc">總結一下:<ul id="53c3955d-1184-4f7d-b6de-a04fdf08e956" class="bulleted-list"><li style="list-style-type:circle">有兩個工作者：Docker Client和Docker Engine。我們在自己電腦都是透過Docker Clinet在下docker指令，然後這個指令會傳遞到Docker Engine，Docker Engine就會在Linux虛擬機中，幫我們執行這些指令。</li></ul><ul id="08cfda02-022b-446f-9175-67567cf6b0c8" class="bulleted-list"><li style="list-style-type:circle">整個過程中有三個空間(想成硬碟就好)：第一個是Mac OS中的空間，我們在這個空間中，放置要建立image所需的檔案(i.e. 最左邊的Dockerfile和Other Files)。這個資料夾我們叫他Build Context。第二個空間是中間的Linux虛擬機的硬碟空間，我們在這個空間中，放置從Mac OS copy過來的資料夾，我們叫copied context，裡面就是放要建立image用的Dockerfile和Other Files。第三個空間是最右邊的，由Docker Engine臨時建起來的container空間(可以想成ram)。這些都是在建立image時臨時開出來的空間，用來放置實際在建立image時要用的檔案，也就是imported files。我們最終就會把這些檔案和指令，包成final image。</li></ul></li></ul><p id="f2bf732b-af5e-44f3-9992-6204885e8b39" class="">
+</p><figure id="371201fc-db72-4971-8c81-a241d6d612ab" class="link-to-page"><a href="CH7%20Dockerfile%20afb2fe021b6e492fa4ee9d6d91ba8c7e/FROM%20371201fcdb7249718c81a241d6d612ab.html">FROM</a></figure><figure id="484e34a1-2784-4c30-a8a2-b987c214e514" class="link-to-page"><a href="CH7%20Dockerfile%20afb2fe021b6e492fa4ee9d6d91ba8c7e/ENTRYPOINT%20484e34a127844c30a8a2b987c214e514.html">ENTRYPOINT</a></figure><figure id="72bd1301-a4b1-4829-a6f4-c82f9c50d0c0" class="link-to-page"><a href="CH7%20Dockerfile%20afb2fe021b6e492fa4ee9d6d91ba8c7e/RUN%2072bd1301a4b14829a6f4c82f9c50d0c0.html">RUN</a></figure><figure id="c876126b-68d0-47f4-b7f5-17b21d163033" class="link-to-page"><a href="CH7%20Dockerfile%20afb2fe021b6e492fa4ee9d6d91ba8c7e/ENV%20c876126b68d047f4b7f517b21d163033.html">ENV</a></figure><figure id="36479064-8bd2-4d9a-a11c-5cc3c05a319d" class="link-to-page"><a href="CH7%20Dockerfile%20afb2fe021b6e492fa4ee9d6d91ba8c7e/WORKDIR%20364790648bd24d9aa11c5cc3c05a319d.html">WORKDIR</a></figure><figure id="b3a370f7-2875-495f-8550-685be25ff66d" class="link-to-page"><a href="CH7%20Dockerfile%20afb2fe021b6e492fa4ee9d6d91ba8c7e/ARG%20b3a370f72875495f8550685be25ff66d.html">ARG</a></figure><figure id="29d4d248-7752-413d-8e06-476f753763c2" class="link-to-page"><a href="CH7%20Dockerfile%20afb2fe021b6e492fa4ee9d6d91ba8c7e/COPY%2029d4d2487752413d8e06476f753763c2.html">COPY</a></figure></div></article></body></html>

@@ -1,0 +1,683 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>建立自定義的 bridge</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="713bc15d-bc6b-40ba-8539-84a1903adafc" class="page sans"><header><h1 class="page-title">建立自定義的 bridge</h1></header><div class="page-body"><pre id="d85ba577-4623-45a3-8ce3-2b7373067d34" class="code"><code># 查詢一下 network 可用的功能
+docker network --help # 可以看到有 ls, inspect create, rm, prune, connect, disconnect
+# 前面的 ls, inspect 之前學過了，今天要來學 create, cnnect, disconnect
+
+
+# 新增網路
+docker network create -d bridge mybridge # -d 是 driver 的意思, 後面跟 bridge，表示要 bridge網路，最後跟一個你幫這個網路命名的name
+
+# 建立 container 時，指定要連這個網路
+docker container run -d --network mybridge --name box3 busybox # --network mybridge 就是設定這個 container 的網路要是 mybridge
+
+# 幫某個 container，開通別的 bridge 網路(注意：一個 container 可以被開通多個網路)
+docker network connect docker0 box3 # 用 connect，幫 box3 這個 container，開通 docker0 這個網路
+# 幫某個 container 關閉連結
+docker network disconnect docker0 box3
+
+# 刪除網路
+docker network rm mybridge
+</code></pre><p id="2fe0279c-b35a-40c4-95c3-ea437767e07a" class="">
+</p><ul id="b5bee960-9246-4efe-8a56-bd79054155fd" class="bulleted-list"><li style="list-style-type:disc">上一節課有講到，預設的 container，都會連在 docker0 這個 bridge 網路。</li></ul><ul id="406cfdc6-86f9-425f-b83f-b80a09feb4cf" class="bulleted-list"><li style="list-style-type:disc">但實際上，我們也可以建立自己的 bridge</li></ul><ul id="99eb377a-0f2a-4d2c-bf65-cdbcaebcaf26" class="bulleted-list"><li style="list-style-type:disc">我們想做出以下這張圖的配置：</li></ul><figure id="2016242b-392a-406f-9e74-ebdfa49a8ee2" class="image"><a href="%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%AE%9A%E7%BE%A9%E7%9A%84%20bridge%20713bc15dbc6b40ba853984a1903adafc/Untitled.png"><img style="width:1766px" src="%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%AE%9A%E7%BE%A9%E7%9A%84%20bridge%20713bc15dbc6b40ba853984a1903adafc/Untitled.png"/></a></figure><ul id="b0b12969-e114-4212-a204-8d509e60ec92" class="bulleted-list"><li style="list-style-type:disc">從圖中可以看出，我的 linux 主機的 ip 是 192.168.200.10</li></ul><ul id="a132912c-8669-4ef1-bb54-5c26b595f151" class="bulleted-list"><li style="list-style-type:disc">然後，預設的 bridge 網路，叫 <code>docker0</code> ，他的 subnet 是 172.17.0.1 (可用 <code>docker network inspect docker0</code> 看到 subnet 的資訊)</li></ul><ul id="770b74b7-fed2-47af-b284-c2545b47abea" class="bulleted-list"><li style="list-style-type:disc">box1 和 box2 是我之前開過的 container，那時候沒有指定網路，所以預設就都是連到 名稱叫做 <code>docker0</code> 的 bridge 網路。那他們被分配到的 ip 分別是 172.17.0.2 和 172.17.0.3</li></ul><ul id="ff198dd0-d0a9-4b28-96a5-83fb69d9827e" class="bulleted-list"><li style="list-style-type:disc">那今天，我想要自己建立一個新的 bridge 網路，叫做 <code>mybridge</code> ，我可以用以下指令：<pre id="71575c6f-d12f-466e-afd7-3e158b9bcc7c" class="code"><code>docker network create -d bridge mybridge</code></pre></li></ul><ul id="8489e38d-d306-4919-bec3-4cb9ec306535" class="bulleted-list"><li style="list-style-type:disc">裡面的 <code>-d</code> 是 <code>driver</code> 的意思，你也可以寫的完整點，寫成 <code>--driver</code> 。後面就是跟網路 driver 的類型(bridge/host/null)，最後加上這個字定義網路的名稱 (mybridge)</li></ul><ul id="7d8b266d-8110-42c2-ac03-da0363d708e9" class="bulleted-list"><li style="list-style-type:disc">接著，我開一個 container 時，就可以指定他連到 mybridge。用的指令是：<pre id="040c01b8-b9c9-4fba-a9a2-e1857ac6dbd1" class="code"><code>docker container run -d --network mybridge --name box3 busybox</code></pre></li></ul><ul id="c7746e77-4231-4181-8389-3874654dedc1" class="bulleted-list"><li style="list-style-type:disc">這邊只有 <code>--network mybridge</code> 是新的指令，表示我要指派這個 container，他的 network，要開通到 mybridge 這個網路。而其他的 <code>-d</code> 是之前教過的 dispatch 的意思，背景執行。 <code>--name</code> 是 container 名稱的意思，我叫他 box3。</li></ul><ul id="89568208-a93a-4a8d-8fce-0df67beb1dbd" class="bulleted-list"><li style="list-style-type:disc">那目前為止，這個 container 已經連到 <code>mybridge</code> 這個網路了。我們可以用 <code>docker container inspect box3</code> 來看到他的連線類型是 bridge，然後 ip 也在 mybridge 的 subnet 之中</li></ul><ul id="fa5ec45a-efdd-4ee9-a0e1-90d9977b4e82" class="bulleted-list"><li style="list-style-type:disc">最後，這邊提醒一下，同一個 container，可以開通多個網路。所以，我如果希望 box3 這個 container 可以和 box1 &amp; box3 通訊，那我就需要將 box3 也加入到 <code>docker0</code> 這個 bridge network 中，這時候我可以用以下指令：<pre id="ea4bd257-90ed-4ec0-932a-0591f5a1d818" class="code"><code>docker network connect docker0 box3 # 用 connect，幫 box3 這個 container，開通 docker0 這個網路docker network connect docker0 box3 # 用 connect，幫 box3 這個 container，開通 docker0 這個網路</code></pre></li></ul><ul id="4a849c02-ae3f-4e78-8c9d-7b060d04fb88" class="bulleted-list"><li style="list-style-type:disc">一樣，我們再檢視一下 box3 這個 container 的網路狀況( <code>docker container inspect box3</code> )，就可以發現在 network 下面，他有連到 <code>docker0</code> 和 <code>mybridge</code> 這兩個網路。</li></ul><p id="bceba303-a3f6-4f54-a6e7-ea856f4035cc" class="">
+</p><p id="fee82a96-1e5b-4a1e-b01d-fa1855fd26d4" class="">
+</p><ul id="8fb226c6-2dc0-40e1-848c-c7c695e7d7b8" class="bulleted-list"><li style="list-style-type:disc">主要的重點，就是 hahow 之前提過的這張圖 (指令也寫在上面了)<figure id="bb6671f9-8a9b-46e0-9dd5-e93608a818ad" class="image"><a href="../../Docker%201ccabc071f704ee58d4a9338ab2eee12/CH8%20%E7%B6%B2%E8%B7%AF%E6%A8%A1%E5%BC%8F%200bc98821b4d84274b1da5c63b2fff6dd/Bridge%2034f42b0535d24cf283cc42eaaf26f7c1/Untitled.png"><img style="width:1380px" src="../../Docker%201ccabc071f704ee58d4a9338ab2eee12/CH8%20%E7%B6%B2%E8%B7%AF%E6%A8%A1%E5%BC%8F%200bc98821b4d84274b1da5c63b2fff6dd/Bridge%2034f42b0535d24cf283cc42eaaf26f7c1/Untitled.png"/></a></figure></li></ul><ul id="5fe42366-2f1f-4998-927e-963b1f3fc6db" class="bulleted-list"><li style="list-style-type:disc"></li></ul><ul id="c9e3d916-5c28-4c5c-af49-844accf34889" class="bulleted-list"><li style="list-style-type:disc"></li></ul><p id="70bcbb9e-c347-447e-babf-c11971c377ad" class="">
+</p><p id="71a50b93-0428-471c-9e64-bb4ded2abc34" class="">
+</p><p id="6825ad48-84ad-41e7-8a54-8bff162779c8" class="">
+</p><p id="f7e04b9c-9eb8-4861-acc6-f9a9e47db475" class="">
+</p><figure id="265103c7-0cfd-47c2-959a-a244012bdc76" class="image"><a href="%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%AE%9A%E7%BE%A9%E7%9A%84%20bridge%20713bc15dbc6b40ba853984a1903adafc/Untitled%201.png"><img style="width:725px" src="%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%AE%9A%E7%BE%A9%E7%9A%84%20bridge%20713bc15dbc6b40ba853984a1903adafc/Untitled%201.png"/></a></figure><figure id="a6e65178-cced-4be1-8369-63a815047f08" class="image"><a href="%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%AE%9A%E7%BE%A9%E7%9A%84%20bridge%20713bc15dbc6b40ba853984a1903adafc/Untitled%202.png"><img style="width:853px" src="%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%AE%9A%E7%BE%A9%E7%9A%84%20bridge%20713bc15dbc6b40ba853984a1903adafc/Untitled%202.png"/></a></figure><ul id="04070ed5-bd40-4b47-9082-14b6a713f43b" class="bulleted-list"><li style="list-style-type:disc">但課程還講蠻多細節的，之後再整理：<ol type="1" id="2a05859a-0204-4a1a-a525-f67ff211ba8f" class="numbered-list" start="56"><li>創建和使用自定義 bridge (上)</li></ol><ol type="1" id="33dbbc1c-e713-4f65-98be-faa1bd845190" class="numbered-list" start="57"><li>創建和使用自定義 bridge (下)</li></ol></li></ul><p id="19068324-2cff-42f2-b698-e82fa26dcd8d" class="">
+</p></div></article></body></html>

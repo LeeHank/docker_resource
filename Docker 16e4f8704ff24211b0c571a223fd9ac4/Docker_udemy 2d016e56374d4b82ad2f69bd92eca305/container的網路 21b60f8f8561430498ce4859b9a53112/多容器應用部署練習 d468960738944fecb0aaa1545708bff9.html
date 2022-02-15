@@ -1,0 +1,695 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>多容器應用部署練習</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="d4689607-3894-4fec-b0aa-a1545708bff9" class="page sans"><header><h1 class="page-title">多容器應用部署練習</h1></header><div class="page-body"><p id="fafdd3b5-76a3-4fe2-8d74-72a0209ecc0e" class="">
+</p><ul id="578524de-ecd3-437c-bf3a-9438b3d282e2" class="bulleted-list"><li style="list-style-type:disc">今天的目標是這樣：</li></ul><figure id="5b32577b-6053-4c32-a1de-de82b6d7856a" class="image"><a href="%E5%A4%9A%E5%AE%B9%E5%99%A8%E6%87%89%E7%94%A8%E9%83%A8%E7%BD%B2%E7%B7%B4%E7%BF%92%20d468960738944fecb0aaa1545708bff9/Untitled.png"><img style="width:432px" src="%E5%A4%9A%E5%AE%B9%E5%99%A8%E6%87%89%E7%94%A8%E9%83%A8%E7%BD%B2%E7%B7%B4%E7%BF%92%20d468960738944fecb0aaa1545708bff9/Untitled.png"/></a></figure><ul id="cc73eafc-a92c-473a-875e-6bf94e1305ff" class="bulleted-list"><li style="list-style-type:disc">我們想要開兩個 container:<ul id="1f3bcac1-49b1-4acf-8a14-ef1b5c259053" class="bulleted-list"><li style="list-style-type:circle">flask-demo: 就是個 flask 的 image</li></ul><ul id="a8291cb7-ce2a-41aa-acfc-04c9db6995f6" class="bulleted-list"><li style="list-style-type:circle">redis-server: </li></ul></li></ul><ul id="7e455818-4e7a-40c2-a3ac-2259a17c5048" class="bulleted-list"><li style="list-style-type:disc">然後，我要架一個 <code>demo-network</code> 這個 bridge 網路。</li></ul><p id="f56b8495-bdb8-4e9e-84c9-673911cb54f0" class="">
+</p><h1 id="52398557-7b91-4d7a-837a-29e2a8633d95" class="">1. 環境準備</h1><ul id="d1261ff4-7ade-4585-ae61-595e89de710a" class="bulleted-list"><li style="list-style-type:disc">我會在 AWS EC2 linux server 上做事</li></ul><ul id="ad661f73-41ec-473e-9c12-3bce8d6528d8" class="bulleted-list"><li style="list-style-type:disc">我在這個路徑( <code>/Volumes/GoogleDrive/我的雲端硬碟/Docker_Udemy/flask_redis</code> )，開了資料夾，放這次的專案</li></ul><ul id="cdc509f9-69d9-476e-b037-e89afc156286" class="bulleted-list"><li style="list-style-type:disc">這個專案資料夾裡面，放了：<ul id="b950e0d6-ba75-437f-b6ba-f8a39986ec78" class="bulleted-list"><li style="list-style-type:circle">app.py</li></ul><ul id="b195172b-4ec8-4d47-8b27-fd98bf045e05" class="bulleted-list"><li style="list-style-type:circle">Dockerfile</li></ul></li></ul><ul id="fb786c47-846b-440b-bc4b-29c317cf80de" class="bulleted-list"><li style="list-style-type:disc">編輯好後，我再用 Filezilla 連到 AWS EC2 linux server，把專案資料夾 copy 過去 ( <code>home/ubuntu/flask_redis</code> )</li></ul><h2 id="c0db43f6-23fd-4fe1-87c8-59c78a8dfcd0" class="">1.1 app.py</h2><ul id="d4569c50-db52-4a39-b4ef-e2afcfa7d62d" class="bulleted-list"><li style="list-style-type:disc"><a href="http://app.py">app.py</a> 的內容如下：</li></ul><pre id="07d848ba-8a97-4d9f-ac68-7872d91c1c20" class="code"><code>from flask import Flask
+from redis import Redis
+import os
+import socket
+
+app = Flask(__name__)
+redis = Redis(host=os.environ.get(&#x27;REDIS_HOST&#x27;, &#x27;127.0.0.1&#x27;), port=6379)
+
+
+@app.route(&#x27;/&#x27;)
+def hello():
+    redis.incr(&#x27;hits&#x27;)
+    return f&quot;Hello Container World! I have been seen {redis.get(&#x27;hits&#x27;).decode(&#x27;utf-8&#x27;)} times and my hostname is {socket.gethostname()}.\n&quot;
+
+if __name__ == &quot;__main__&quot;:  # 如同上述，這邊就是在檢查 __name__ 這個變數的結果是不是 &quot;__main__&quot;
+    app.run(
+        host=&quot;0.0.0.0&quot;,  # 允許訪問的主機IP，設為 0.0.0.0 表示所有主機的意思，這樣所有主機都可以訪問我的 app
+        port=5000
+    )</code></pre><ul id="0047bd54-31cc-4b0e-aa3b-b3f855dd24b1" class="bulleted-list"><li style="list-style-type:disc">這邊注意一下， 中間的 <code>redis = Redis()</code> 這邊，他的 host 的 ip，是用 <code>os.environ.get()</code> ，去抓環境變數，哪個環境變數？ <code>REDIS_HOST</code> 這個環境變數。所以等等會需要把 REDIS_HOST 給定義好，內容就是一段 IP。那回頭看最上面的圖，這邊要寫的 ip，就是 <code>redis-server</code> 這個 container 被分配到的 ip。</li></ul><ul id="9bb6277c-6056-483d-98a4-f3ee3423170d" class="bulleted-list"><li style="list-style-type:disc">補充一下，因為要取得這個 container 的 ip，我們之前都是用互動模式進到這個 container 中，去用 <code>ifconfig</code> 來看。但這樣實在太累了。這邊教一招，如果 container 是在自己定義的 bridge network 之下的話，直接寫 container name，就等於寫 ip。</li></ul><ul id="282d84f8-30f4-451b-9237-925f4187f271" class="bulleted-list"><li style="list-style-type:disc">例如，我在 flask-demo 這個 container 的互動模式中，我在 linux bash 裡面打 <code>ping redis-server</code> 可以直接 ping 到東西。</li></ul><ul id="75c875be-f8e1-45b1-b619-461fdd684c2b" class="bulleted-list"><li style="list-style-type:disc">所以，我的想法就是，我等等寫 Dockerfile 時，會做一個環境變數叫 <code>REDIS_HOST</code> ，然後在把 <code>flask-demo</code> 這個 container 開起來的時候，我要把 <code>redis-server</code> 這個已經開好的 container，當作環境變數的參數傳進去。那這樣我在 <code>flask-demo</code> 的 container 裡面，要去運行 <code>os.environ.get(&#x27;REDIS_HOST&#x27;)</code> 的時候，他的環境變數就會抓到 <code>redis-server</code> 這個 container name，就等於抓到 ip，然後再配上後面的 port 已經寫好 6379，那就可以去 <code>redis-server</code> 裡面取資料了</li></ul><h2 id="1267710a-c49f-4db6-8337-30c2620fbfa9" class="">1.2. Dockerfile</h2><ul id="afa58624-0dd6-4130-99e7-e5d8c5d27e21" class="bulleted-list"><li style="list-style-type:disc">Dockerfile 的內容如下：</li></ul><pre id="9ac90e51-f798-4228-b9a6-4fbf7c0ead89" class="code"><code>FROM python:3.9.5-slim
+
+RUN pip install flask redis &amp;&amp; \
+    mkdir /src &amp;&amp; \
+    apt-get update
+
+COPY app.py /src/app.py
+
+WORKDIR /src
+
+ENV REDIS_HOST=redis
+
+EXPOSE 5000
+
+CMD python app.py</code></pre><p id="d3618264-8c5b-41d2-95cc-8505ee607889" class="">
+</p><h1 id="d6bc5964-9f6c-4758-bd6c-6ec65d4bae9f" class="">2. image 準備</h1><ul id="12a55dbe-a8d5-4493-8ada-1a5d00d21ac6" class="bulleted-list"><li style="list-style-type:disc">從這邊開始，就都是在 AWS EC2 linux server 裡做事了</li></ul><ul id="932cc10c-947d-474c-8cdf-41333e869368" class="bulleted-list"><li style="list-style-type:disc">首先，把 Filezilla 連到 AWS EC2 linux server，並把剛剛的專案資料夾複製過去<figure id="d46ef013-9233-4328-9cbd-fe299997f3c5" class="image"><a href="%E5%A4%9A%E5%AE%B9%E5%99%A8%E6%87%89%E7%94%A8%E9%83%A8%E7%BD%B2%E7%B7%B4%E7%BF%92%20d468960738944fecb0aaa1545708bff9/Untitled%201.png"><img style="width:1656px" src="%E5%A4%9A%E5%AE%B9%E5%99%A8%E6%87%89%E7%94%A8%E9%83%A8%E7%BD%B2%E7%B7%B4%E7%BF%92%20d468960738944fecb0aaa1545708bff9/Untitled%201.png"/></a></figure><figure id="53e83cff-7e56-471b-9d43-7c9379917ea5" class="image"><a href="%E5%A4%9A%E5%AE%B9%E5%99%A8%E6%87%89%E7%94%A8%E9%83%A8%E7%BD%B2%E7%B7%B4%E7%BF%92%20d468960738944fecb0aaa1545708bff9/Untitled%202.png"><img style="width:933px" src="%E5%A4%9A%E5%AE%B9%E5%99%A8%E6%87%89%E7%94%A8%E9%83%A8%E7%BD%B2%E7%B7%B4%E7%BF%92%20d468960738944fecb0aaa1545708bff9/Untitled%202.png"/></a></figure></li></ul><ul id="7c619940-e43c-43e2-a41e-7e2956ec6485" class="bulleted-list"><li style="list-style-type:disc">再來，從 terminal ssh 到這個遠端 server</li></ul><pre id="13f55402-74b5-4fae-80a0-05a14e7b74b7" class="code"><code>ssh -i &quot;./desktop/aws_pair_key/shiny_deploy.cer&quot; ubuntu@ec2-3-15-41-154.us-east-2.compute.amazonaws.com</code></pre><ul id="94ad53bd-cdef-4665-a0e1-ed0f69dbdacf" class="bulleted-list"><li style="list-style-type:disc">接著就可以開始做事了</li></ul><h2 id="44489d83-3f43-4609-8909-091a5ee2df9b" class="">2.1 flask-demo</h2><ul id="75ae0ea2-36c9-4bc1-a076-0dc0944d8388" class="bulleted-list"><li style="list-style-type:disc">我們把剛剛寫好的 Dockerfile 做成 image，並取名為 <code>flask-demo</code>  </li></ul><pre id="6eae58e5-720e-4476-a968-11a7e83640b0" class="code"><code>cd home/ubuntu/flask_redis
+docker image build -t flask-demo .</code></pre><h2 id="e5616c09-6272-4d9b-9ee6-63f32b790dd8" class="">2.2 redis</h2><ul id="72697ae0-cd9c-4e42-8db1-4a94a9aa53f6" class="bulleted-list"><li style="list-style-type:disc">redis 的話，就直接從 dockerhub 拉下來就好</li></ul><pre id="c2af7d05-b3c4-4277-87cf-3125be43f774" class="code"><code>docker image pull redis</code></pre><h1 id="73800fee-7926-441c-96f0-8b9640122f43" class="">3. docker bridge 網路準備</h1><ul id="b09fb42b-bd1b-4a2c-8b26-511ce2c27d4f" class="bulleted-list"><li style="list-style-type:disc">我們建立一個 bridge 網路，名稱叫他 <code>demo-network</code></li></ul><pre id="46d43959-f886-41b0-a78c-705fb8e57899" class="code"><code>docker network create --driver bridge demo-network</code></pre><h1 id="c756159b-a3f0-4a7e-97f3-d40eddb901fa" class="">4. 建立 container</h1><h2 id="b32d2871-d5f8-4619-a4b7-cb7d4814820e" class="">4.1 建立 redis container</h2><ul id="5d2a9ac1-31a9-4b6a-9667-b9ef53f3b147" class="bulleted-list"><li style="list-style-type:disc">建立一個叫 <code>redis-server</code> 的 container<ul id="5acb5091-90fd-498a-9a77-2a62bf6d591a" class="bulleted-list"><li style="list-style-type:circle">裡面用的 image 是直接從 dockerhub 拉下來的 <code>redis</code> </li></ul><ul id="6b643018-0b09-4004-b274-6d5b7d7f75c6" class="bulleted-list"><li style="list-style-type:circle">網路要用剛剛定好的 <code>demo-network</code></li></ul></li></ul><pre id="07e85a73-6f02-4e77-b169-839cfda641fb" class="code"><code>docker container run -d --name redis-server --network demo-network redis</code></pre><h2 id="b65adc1e-7407-4595-952d-28ee6b834d9b" class="">4.2 建立 flask container</h2><ul id="16b585de-2da0-4375-abc6-4289ed86cd52" class="bulleted-list"><li style="list-style-type:disc">建立一個 <code>flask</code> 的 container<ul id="cc0d7e2b-5b0f-4e69-9c53-16b16966e1c3" class="bulleted-list"><li style="list-style-type:circle">裡面的 image 是剛剛 build 好的 <code>flask-demo</code> </li></ul><ul id="812c3add-7c93-4af6-95fb-a47b551dea1c" class="bulleted-list"><li style="list-style-type:circle">網路要用剛剛定好的 <code>demo-network</code>  </li></ul></li></ul><pre id="1697bb51-1bd7-44d5-9cda-524860d8d67f" class="code"><code>docker container run -d --network demo-network --name flask-demo --env REDIS_HOST=redis-server -p 5000:5000 flask-demo</code></pre><ul id="f039ef4f-480c-4e87-ab66-916f666e8739" class="bulleted-list"><li style="list-style-type:disc">這邊注意到，有用到 <code>--env REDIS_HOST=redis-server</code> 這個指令，就是把環境變數傳到這個 container 裡面，那現在這個 container 中，就可以調用 REDIS_HOST 這個環境變數</li></ul><ul id="d753521b-e643-4e9a-810a-7d0a0f7a63b1" class="bulleted-list"><li style="list-style-type:disc">對照到剛剛的 app.py，現在 <code>redis = Redis(host=os.environ.get(&#x27;REDIS_HOST&#x27;, &#x27;127.0.0.1&#x27;), port=6379)</code> 這行指令，就REDIS_HOST 這個環境變數就可以讓他抓到 <code>redis-server</code> 這個 container 的 ip了 (至於後面的 127.0.0.1 不用理他，那個是當你環境變數抓取失敗時，他會 assign 這個 ip 當替代方案）</li></ul><h1 id="b92e76dc-6153-495c-a8c7-134fe6b1b751" class="">5. 收割吧！</h1><ul id="9e23708a-b87f-4fb0-afcd-ae364697c7e7" class="bulleted-list"><li style="list-style-type:disc">在我本機的瀏覽器裡， key 入 AWS EC2 linux server 的 ip 加上 port 號 <code>3.15.41.154:5000</code>  ，就可以看到結果：<figure id="38a63208-3ab7-4c42-aa6d-9a63770eb0d0" class="image"><a href="%E5%A4%9A%E5%AE%B9%E5%99%A8%E6%87%89%E7%94%A8%E9%83%A8%E7%BD%B2%E7%B7%B4%E7%BF%92%20d468960738944fecb0aaa1545708bff9/Untitled%203.png"><img style="width:1676px" src="%E5%A4%9A%E5%AE%B9%E5%99%A8%E6%87%89%E7%94%A8%E9%83%A8%E7%BD%B2%E7%B7%B4%E7%BF%92%20d468960738944fecb0aaa1545708bff9/Untitled%203.png"/></a></figure></li></ul><p id="420a2925-c7ec-4f8f-8321-081b9eaeef73" class="">
+</p><p id="3c8e1df4-e9b6-4832-bf0d-e02794e7f61d" class="">
+</p></div></article></body></html>

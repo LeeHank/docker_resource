@@ -1,0 +1,720 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>R and Docker</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="78d26ce2-92fa-443f-80e6-e006e32e37c5" class="page sans"><header><h1 class="page-title">R and Docker</h1></header><div class="page-body"><ul id="11eb96cb-4cc6-47d7-87fb-0ab752beae94" class="bulleted-list"><li style="list-style-type:disc">這邊先摘要 RStudio 的這篇文章，言簡意賅： <a href="https://environments.rstudio.com/docker">https://environments.rstudio.com/docker</a>  </li></ul><p id="4b8bf498-acdb-4c51-b8ae-c9880509ee71" class="">
+</p><h1 id="a80c05a4-a6b7-4c5e-9a69-83ea8d4be153" class="">0. 前言</h1><ul id="331a1594-83ba-4ba8-b658-06f547abf2a2" class="bulleted-list"><li style="list-style-type:disc">Docker是個很大的主題，這篇文章只focus在介紹，如何用Docker，來建立一個 R 的 reproducible environments</li></ul><ul id="c6824fb5-2774-46b5-8bc6-d9b177d66333" class="bulleted-list"><li style="list-style-type:disc">有四個重要的概念一定要很清楚：<ul id="51057559-8141-4c61-af18-63aa795a5f4e" class="bulleted-list"><li style="list-style-type:circle">Dockerfiles</li></ul><ul id="03e4d472-9765-4f63-87be-54446428f5dc" class="bulleted-list"><li style="list-style-type:circle">Images</li></ul><ul id="61f23d7c-3930-4d7b-b142-51652ccee681" class="bulleted-list"><li style="list-style-type:circle">Registries</li></ul><ul id="bf164e78-3b1c-4408-98f5-5287bbe6fa1c" class="bulleted-list"><li style="list-style-type:circle">Containers</li></ul></li></ul><ul id="593772ea-ddbe-4882-8d5e-900d394f0bdc" class="bulleted-list"><li style="list-style-type:disc">這四個概念清楚後，就開始把重點放在 Layers in a container</li></ul><p id="3007b727-d58c-4510-95ef-d67491fb8ed7" class="">
+</p><h1 id="4fdc8b49-78cf-4cd9-b655-b56b92a6d583" class="">1. 四個重要概念</h1><ul id="ee6380a4-a741-4582-a801-c12dc0e5bd09" class="bulleted-list"><li style="list-style-type:disc">作者把理解 Docker 的四個概念，拿來和釀造與享用啤酒做類比<ul id="a3b47da2-e56d-4a76-b758-107043ba9018" class="bulleted-list"><li style="list-style-type:circle"><code>Dockerfile</code>: 要建立一個環境時，所需要的步驟的筆記。這就像釀啤酒時要看的recipe。</li></ul><ul id="2825a14f-eebe-4d06-8852-bcca68c4d2d5" class="bulleted-list"><li style="list-style-type:circle"><code>Image</code>: 照著Dockerfile去執行這些步驟後，所得到的環境，就叫image。這就像釀啤酒時，你照個recipe去製作，最後就會得到這種recipe下的一批啤酒(e.g. 台啤recipe，做出台啤)</li></ul><ul id="046d56e1-831c-4863-a249-1f7dd562faa1" class="bulleted-list"><li style="list-style-type:circle"><code>Container</code>: 剛剛說的 image ，指的環境，就是 os + linux package + R package。那這個環境要運行在某個硬體上 (e.g. 主機, 虛擬機)，那 container就是架在 docker engine 上的一種硬體，我們打開這個 container 後，就可以運行 image ，來得到我要的環境了。這類比回剛剛的啤酒，就是我們會找個地方(i.e. container)，來打開啤酒好好享用的意思。</li></ul><ul id="cccf32a2-d087-45e5-b84e-63bdd2baf30e" class="bulleted-list"><li style="list-style-type:circle"><code>Registry</code>：放各種 image 的線上平台，我們可以去這些平台下載要用的 image ，也可以把自己的image傳到這些平台。這就像啤酒商店，裡面有各式各樣的啤酒，你想買啥就買啥。</li></ul></li></ul><ul id="16e61997-871d-45bb-b0a4-7904f5f0c709" class="bulleted-list"><li style="list-style-type:disc">這四個概念可以畫成下圖：<figure id="c44096f5-8add-476c-b25a-b276b82eb850" class="image"><a href="R%20and%20Docker%2078d26ce292fa443f80e6e006e32e37c5/Untitled.png"><img style="width:480px" src="R%20and%20Docker%2078d26ce292fa443f80e6e006e32e37c5/Untitled.png"/></a></figure></li></ul><ul id="aca6ef2d-00e7-4f7f-854b-459f8896b0ce" class="bulleted-list"><li style="list-style-type:disc">R user 平常在 run 的 process 大概分成兩個，這兩個都和 container 息息相關：<ul id="c07f6614-51d7-43df-b828-85627d02b9ae" class="bulleted-list"><li style="list-style-type:circle">Development session</li></ul><ul id="17922214-8b90-4532-8f8c-a7829191be9f" class="bulleted-list"><li style="list-style-type:circle">Production Runtime</li></ul><figure id="9efcabad-d65b-4ec5-97a7-6cf7ae72174c" class="image"><a href="R%20and%20Docker%2078d26ce292fa443f80e6e006e32e37c5/Untitled%201.png"><img style="width:1422px" src="R%20and%20Docker%2078d26ce292fa443f80e6e006e32e37c5/Untitled%201.png"/></a></figure></li></ul><h1 id="97c5dac8-b8ec-4a50-9bc6-9d2d4be0aa1c" class="">2. Example Registries</h1><ul id="8199b9ed-3452-4f80-93e3-129b23318926" class="bulleted-list"><li style="list-style-type:disc">這邊我想先提一下，我們如果要下載 image 的話，可以去哪些地方下載。</li></ul><ul id="895053c2-6fe1-42db-8676-150fe020e2e3" class="bulleted-list"><li style="list-style-type:disc">在 R 的使用上，主要有三個 project 在負責。他們的目的不太一樣，所以造出來的 image 也有所不同：<ul id="0fdd44d7-46b6-46c0-a2a3-961abf7e5601" class="bulleted-list"><li style="list-style-type:circle">Rocker Project：<ul id="b58d8564-fd6a-4822-bb51-4017f7d8d8a7" class="bulleted-list"><li style="list-style-type:square">先上連結：<a href="https://www.rocker-project.org/">https://www.rocker-project.org/</a></li></ul><ul id="0e87ca80-b649-4ce8-93da-32e8488335e0" class="bulleted-list"><li style="list-style-type:square">這個 project 的目的，是去建立一系列可以 self-contained 的 image，來讓 R user 做 R 的應用開發。</li></ul><ul id="94d2bca4-8c69-4950-96ed-34d1d239534a" class="bulleted-list"><li style="list-style-type:square">所以，我們最常下載他們的 image 來用，因為 hen 貼心。舉例來說， <code>rocker/tidyverse</code> 這個 image ，就幫你包好 OS, system dependency, R, tidyverse, RStudio server 這些。所以一打開他就很完整了。又例如 <code>rocker/shiny-verse</code> 就是幫你包好 shiny server + tidyverse 等等。</li></ul><ul id="9591b061-d5f5-4c41-931f-910afd24d9f5" class="bulleted-list"><li style="list-style-type:square">提醒一下，他們家的 image，作業系統都是用 Debian OS (不知道為何)</li></ul></li></ul><ul id="84ba87eb-4ebc-42e4-86c3-e1588fb752b6" class="bulleted-list"><li style="list-style-type:circle">RStudio Images：<ul id="4ea697a4-ae96-45a8-8c3f-9bce60c61326" class="bulleted-list"><li style="list-style-type:square">先上連結：<a href="https://github.com/rstudio/r-docker">https://github.com/rstudio/r-docker</a></li></ul><ul id="3bda8553-b1f1-4293-9870-60a8954486ed" class="bulleted-list"><li style="list-style-type:square">這個 project 的image，只簡單做到OS+dependency+R verison而已。例如，可用 <code>docker pull rstudio/r-base:4.0-xenial</code> 來下載 ubuntu-xenial這個作業系統搭配R4.0的image。因為這個 project 的目的，是讓使用 RStudio Launcher 的人，有個base layers來用而已。</li></ul><ul id="36226512-f20b-4ec1-acd6-a08b7a823b69" class="bulleted-list"><li style="list-style-type:square">如果想看細節，可以點進連結，就會發現，啊哈，這不就是我最熟悉的 RStudio 的 github嗎？沒錯，他有一個專案資料夾叫 <code>r-docker</code> ，裡面就是把 R的版本 分門別類為各自的資料夾。然後在給定版本的資料夾，再分各作業系統的資料夾。然後在指定作業系統的資料夾下，就可以看到對應的Dockerfile了。</li></ul></li></ul><ul id="db0ca1fa-0643-4042-8351-79d5a4f29a89" class="bulleted-list"><li style="list-style-type:circle">R-Hub:<ul id="484f4396-06e8-4b65-a370-8f2df4a10bf4" class="bulleted-list"><li style="list-style-type:square">這個我還沒整理，但他的目的，是for package開發的人用的。</li></ul><ul id="55cfcb55-82f5-4404-b41e-ddae97e91988" class="bulleted-list"><li style="list-style-type:square">當我們開發完package，傳到CRAN時，CRAN會有一系列的環境，去對你的package做測試。那R-Hub這個專案，就是幫你把這些環境包好成image，那你去下載這些image，開container來run這些image，就可以檢驗你開發的package，是不是在這些環境中運行都可以過關。</li></ul></li></ul></li></ul><h1 id="2c82fdde-5e08-4485-bd22-883930f6973a" class="">3. Layers in a Container</h1><ul id="8449c4e6-88d2-48f3-97c1-851dae0dd147" class="bulleted-list"><li style="list-style-type:disc">一個 R 的 data science container，會包含這六個基本 components  <ol type="1" id="7e16d9c1-f780-4492-a83e-c298f104ca72" class="numbered-list" start="1"><li>Base Operating System: 就是我們是跑在哪個OS上</li></ol><ol type="1" id="95d9b20c-87e3-4b3f-a6a7-d138b0dbe1ac" class="numbered-list" start="2"><li>System dependencies</li></ol><ol type="1" id="cc3ca6da-d41b-4412-b1a3-69debb7e304b" class="numbered-list" start="3"><li>R</li></ol><ol type="1" id="aa420075-0571-4a2b-aac3-f7cfaad7c5ba" class="numbered-list" start="4"><li>R Packages</li></ol><ol type="1" id="a4a55295-9989-4102-a058-1805de4d4ef1" class="numbered-list" start="5"><li>Code</li></ol><ol type="1" id="ff049244-388b-4684-96e8-7497abeec79b" class="numbered-list" start="6"><li>Data</li></ol></li></ul><ul id="7266187d-410b-446c-87a8-7abb03bc6c7c" class="bulleted-list"><li style="list-style-type:disc">所以，我們開一個 container 在 run 時，可以舉例成下圖：<figure id="413d17f1-9388-47a6-8823-33987718f43c" class="image"><a href="R%20and%20Docker%2078d26ce292fa443f80e6e006e32e37c5/Untitled%202.png"><img style="width:336px" src="R%20and%20Docker%2078d26ce292fa443f80e6e006e32e37c5/Untitled%202.png"/></a></figure></li></ul><ul id="28f41e02-fe31-4473-bcdd-b3f45b07fd10" class="bulleted-list"><li style="list-style-type:disc">那這個 container 裡面要跑這麼多事，可以有一部分分工給 image 來做。而這個 image，他最少可以只包含1，最多可以包含1到6</li></ul><ul id="a28bfbcd-9786-4ea3-8020-ba6e52d40824" class="bulleted-list"><li style="list-style-type:disc">舉例來說<ul id="db7b40b8-db5e-4093-8ba5-2ae67d7d1e6a" class="bulleted-list"><li style="list-style-type:circle">我可以只下載 <code>ubuntu xential</code> 的 image，所以此時我開一個container來run 這個 image 時，我得到一個 ubuntu 的環境。然後，我在此container裡面，就好像進到linux server裡面，我可以依序用 command line，來灌 linux package(就是第2點的system dependencies，例如圖中的 libssl 這個 package)，灌R，灌R packages，用touch開RMarkdown寫code，開文字檔用逗點分格寫data存data，再run我的.Rmd檔。</li></ul><ul id="9cde1b47-4c61-4544-83a4-f2cc74514408" class="bulleted-list"><li style="list-style-type:circle">我也可以下載 <code>rocker/tidyverse</code> 的image，此時這個image已經幫你包好 1~4 (OS他是用 Debian，System dependencies已幫你灌好，R用最新版 4.0.0，R packages 幫你裝好 tidyverse的所有東西)，所以你container一打開去run他，你就已經完成 1~4 了，接著，你就在這個container裡面(其實就是個灌好tidyverse的linux server)，去寫你的code就好</li></ul><ul id="4e493e02-adef-4949-8668-244079fe64b6" class="bulleted-list"><li style="list-style-type:circle">我可以自己寫個 Dockerfile，這個file裡面，我把步驟寫好：先下載 <code>rocker/tidyver</code> image → 再去 github 上 clone 我寫好的 code → 再從本機 copy 我的 data 進來。那我用這個Dockerfile去build出我的專屬image時，他裡面就包含 1~ 6 了。這就是常被提及的 docker 部署包。一打開就可以跑你的app了。</li></ul></li></ul><ul id="a128d5ec-5758-419f-8f63-90708decd2b4" class="bulleted-list"><li style="list-style-type:disc">接下來，就依序細講這六個 componet，如果要寫在 Dockerfile裡面怎寫。或是，不寫在 Dockerfile，那他在開啟container後，要如何寫，才能運作好。</li></ul><p id="6c493120-7f17-481b-a405-a07d2c50a51d" class="">
+</p><h2 id="99bd617e-efc6-4e7a-ad32-9759f59e1614" class="">3.1 Base OS</h2><ul id="a6105120-aab5-46f2-b1e0-1fe9bf7eb512" class="bulleted-list"><li style="list-style-type:disc">這個是一定要用 image 的。所以作法是：<ul id="7765a99f-9893-4b52-b7f5-44ec4af93d2b" class="bulleted-list"><li style="list-style-type:circle">先去DockerHub，下載別人寫好的Base OS image。例如 <code>docker pull ubuntu:xential</code> </li></ul><ul id="6729e677-60ef-49aa-b9b6-624dfc414536" class="bulleted-list"><li style="list-style-type:circle">寫 Dockerfile，第一行就是寫剛剛下載好的 image。例如 <code>FROM ubuntu:xential</code>  </li></ul></li></ul><ul id="9624ecb2-e366-42b7-907c-4515e79bc9c0" class="bulleted-list"><li style="list-style-type:disc">坦白說，這部分我們很少用，因為我們通常都是下載 R 的 image，那這個 image 他已經幫我們從 Base OS, system dependency, 一路包到 R了。</li></ul><p id="c552dd1e-ead1-4582-a46a-f2936eeaa194" class="">
+</p><h2 id="14a395ec-b0c5-4cfe-be31-423eaac7e129" class="">3.2 System Dependencies</h2><ul id="d2ba9f16-89d9-4904-bbe0-13cfe89f922a" class="bulleted-list"><li style="list-style-type:disc">安裝R時，需要一些system libraries 才能run。detail可以看這個 <a href="https://environments.rstudio.com/r-installation.html">連結</a>。但這部分我們不用太擔心，因為我們通常會下載 R 的 Imgae來用，這些 image 已經都幫我們包好 OS 和 system dependency了。</li></ul><ul id="d0ecab5d-415f-4686-8357-703e8ce399a7" class="bulleted-list"><li style="list-style-type:disc">除了R以外，R的package也會需要對應的一些 system libraries。這些system libraries可以從這個package的description file裡面看到，或是，可以用 <code>sysreq</code> 這個 R package幫你自動下載這些系統套件。</li></ul><ul id="8a2f4aac-ab6f-4bee-b35b-d9abdf035908" class="bulleted-list"><li style="list-style-type:disc">對我們來說，處理 R package要用的 system dependency比較常會碰到。因為我們自己寫的dockerfile，可能是從 <code>rocker/tidyverse</code> 開始，然後會繼續安裝我需要的 package。那在裝這些 package時，就可能遇到 error，告訴你沒有安裝需要的 system dependency。這時就要把這些system dependency也寫進Dockerfile裡面。</li></ul><ul id="6064469b-e014-43ef-9f35-3bfc21cd875d" class="bulleted-list"><li style="list-style-type:disc">以下，用官網的例子來看怎麼把 R 的 system dependencies 和 R package 的 system dependencies寫進Dockerfile內。(官網建議要分開寫，比較清楚)</li></ul><pre id="9f1646ad-4017-4719-8a57-e8012648ad84" class="code"><code>FROM ubuntu:xenial
+# Install system dependencies for R
+RUN apt-get update -qq &amp;&amp; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    apt-transport-https \
+    build-essential \
+    curl \
+    gfortran \
+    libatlas-base-dev \
+    libbz2-dev \
+    libcairo2 \
+    libcurl4-openssl-dev \
+    libicu-dev \
+    liblzma-dev \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libpcre3-dev \
+    libtcl8.6 \
+    libtiff5 \
+    libtk8.6 \
+    libx11-6 \
+    libxt6 \
+    locales \
+    tzdata \
+    zlib1g-dev
+    
+# Install system dependencies for the tidyverse R packages
+RUN apt-get install -y \
+    make
+    libcurl4-openssl-dev
+    libssl-dev
+    pandoc
+    libxml2-dev</code></pre><ul id="d54803ca-4aa8-4a6c-8b57-b2237c94ef12" class="bulleted-list"><li style="list-style-type:disc">可以看到，第一行是安裝OS</li></ul><ul id="e28fe9a1-69fc-486d-b324-80a701920b6f" class="bulleted-list"><li style="list-style-type:disc">第二行的RUN就在安裝R所需的system dependencies</li></ul><ul id="571f0a82-b285-4216-a323-70b49bc997df" class="bulleted-list"><li style="list-style-type:disc">第三個區塊是安裝R package所需的system dependencies(這邊放入安裝tidyverse需要的dependencies)</li></ul><p id="2f6011b9-d36d-4e01-9bb9-bb9fd596ef86" class="">
+</p><h2 id="a1f5783c-8963-47ac-a40e-d9ced4509caa" class="">3.3 R  </h2><ul id="0682a2f3-99b7-4bb5-a9ec-f4ab2c4a9bad" class="bulleted-list"><li style="list-style-type:disc">在Dockerfile中，安裝R，有2種方式：<ul id="8fc1f695-ae7b-40fa-9622-92626f0f7658" class="bulleted-list"><li style="list-style-type:circle">在base image的時候，就直接引入有R的image了(最常用，最簡單)<pre id="94bbecde-be0b-4f3b-b5a4-30f9d59323fb" class="code"><code># 從 RStudio的r-docker來的image
+FROM rstudio/r-base:3.5-xenial</code></pre></li></ul><ul id="ce053b28-d87d-4a09-91b1-650882e385ff" class="bulleted-list"><li style="list-style-type:circle">base image只有OS，然後我自己在這個OS下，用RUN的指令，去安裝R<ul id="e0a238bd-e6c5-4ede-ae65-930db2499caa" class="bulleted-list"><li style="list-style-type:square">我可以用 wget 的方式，從給定的網址下載下來後，再安裝<pre id="90359715-02c3-44f9-b393-148c551ca1db" class="code"><code># download a version of R and build from source
+ARG R_VERSION=3.5.2
+RUN wget https://cdn.rstudio.com/r/ubuntu-1604/pkgs/r-${R_VERSION}_1_amd64.deb
+RUN apt-get install -y gdebi-core
+RUN gdebi r-${R_VERSION}_1_amd64.deb</code></pre></li></ul><ul id="69444021-90b0-4c7e-805b-e3d4cb44d42d" class="bulleted-list"><li style="list-style-type:square">我也可以用OS內建的 package manager(e.g. centos的yum install, debian/ubuntu 的 apt-get install, macos的homebrew...)來下載安裝<pre id="9a52f59b-bc29-4c5a-a269-466bcfefa3b6" class="code"><code># not the recommended approach
+# be sure you request a specific version of R
+RUN apt-get install -y \
+  r-base=3.4.4-1ubuntu1</code></pre></li></ul></li></ul></li></ul><h2 id="c9c2ddec-0c76-4d81-87be-c90df2f51e23" class="">3.4 R packages</h2><ul id="a286a49f-c454-4949-b9c5-7fc71a2c4d00" class="bulleted-list"><li style="list-style-type:disc">有兩類方式：<ul id="60cb136b-6ae7-49c5-afb5-156432699483" class="bulleted-list"><li style="list-style-type:circle">把 R package也直接包到 image 裡面。</li></ul><ul id="9896cf4f-9077-4a2f-a1ed-da6f01fb0880" class="bulleted-list"><li style="list-style-type:circle">R package沒有放在 image裡面。而是等打開container去run base image時，在這個環境下，才去安裝 R package</li></ul></li></ul><h3 id="a3fb9244-1787-4533-a2dd-af74091e86cf" class="">3.4.1 把R package直接包到 imgae 裡面</h3><ul id="18023aee-355a-46bd-a3ee-821b987ff9ae" class="bulleted-list"><li style="list-style-type:disc">舉例來說，我可以在Dockerfile裡面，加上下面的指令，來安裝我要的 package:<pre id="fd77e481-dc93-4bc3-9e9f-7a925b0c55f9" class="code"><code>RUN R -e &#x27;install.packages(c(&quot;tidyverse&quot;,&quot;lubridate&quot;), repo = &quot;https://rpkgs.company.com/frozen/repo/123&quot;)</code></pre></li></ul><ul id="b00d5106-ece6-43dc-b7d1-b1057760bfe7" class="bulleted-list"><li style="list-style-type:disc">另一種作法是，我要他按照我的 <code>renv.lock</code> 文件，來安裝需要的package。這種作法我們就要先安裝 <code>renv</code> 這個 package，然後把 <code>renv.lock</code> 的文件從本機copy來container，然後才用 <code>renv::restore()</code> 去安裝。<pre id="77e2b56a-9f55-4deb-b3a2-29dca54ea7ae" class="code"><code># 先安裝 renv 這個 package
+ENV RENV_VERSION 0.13.2
+RUN R -e &quot;install.packages(&#x27;remotes&#x27;, repos = c(CRAN = &#x27;https://cloud.r-project.org&#x27;))&quot;
+RUN R -e &quot;remotes::install_github(&#x27;rstudio/renv@${RENV_VERSION}&#x27;)&quot;
+# 再把container的工作目錄設定好(optional)
+WORKDIR /project
+# 再把本機上的 renv.lock，複製一份到container空間上的工作目錄下
+COPY local/renv.loc, renv.lock
+# 再啟動 renv::restore()的功能去安裝 renv.lock 裡面列的 package
+RUN R -e &quot;renv::restore()&quot;</code></pre></li></ul><ul id="bf660af0-5054-479c-8ccb-bad9fd1a4f66" class="bulleted-list"><li style="list-style-type:disc">這樣做的好處是，我的 image 裡面就已經包好我要用的 package，所以要部署到任何地方都很方便，可以 container 開起來就直接用</li></ul><ul id="a435e76e-f689-4315-97bf-4abdeeb826a6" class="bulleted-list"><li style="list-style-type:disc">但這樣做的壞處是<ul id="681fca59-c9fe-4cc3-b6e8-ffade8bce784" class="bulleted-list"><li style="list-style-type:circle">你的 image 可能很肥大，完全發揮不了 renv 的 global cache 優點。</li></ul><ul id="53f354c1-fc44-41b5-896e-1b56bff20a72" class="bulleted-list"><li style="list-style-type:circle">這個 image 太特定 for 這個專案使用，generalization能力極差( 因為別的專案，要用的package會和這個image不同，他還要自己update或remove package，那就會很難把你的這個 image 來當作他的 base image來用)</li></ul><ul id="a1e37c3e-bd99-4950-947d-a2acb67b5a82" class="bulleted-list"><li style="list-style-type:circle">還有一個明顯的挑戰是，裝這些 R package都要跟著安裝 linux 的 system dependency，你可能每寫入一個 R package 並 build image時，他就報 error，然後你就要照著這個error去補需要的 linux dependency 到 Dockerfile裡面，這常常會搞死人。那RStudio有賣個產品叫 <code>RStudio Package Manager</code> ，可以幫你解決這個問題，有興趣可以看這裡 (<a href="https://blog.rstudio.com/2019/11/07/package-manager-v1-1-no-interruptions/">連結</a>) ，但我們應該是不會碰到付費版的，所以也沒用</li></ul></li></ul><h3 id="cc44082e-09b0-4ea4-8fd5-1a3c23b91bf9" class="">3.4.2 R package放在 image外，run container時才安裝</h3><ul id="581918a1-b286-4536-b5c8-fade744aaa01" class="bulleted-list"><li style="list-style-type:disc">最簡單的做法，就是開container時，做volume link，在本機放個package資料夾，讓他對應container空間中的package資料夾。那在container中安裝的package，就都可以被備份到本機中。那就不怕如果container斷掉或重啟時，原本裝好的package都不見。舉例來說，我的image是用 <code>rocker/r-base</code>，那我想裝 tidyverse 這個 package，我可以這樣做：<pre id="437e2204-3594-40c3-8cc6-775d3f72e5e0" class="code"><code>#本機上的備份資料夾，用來備份container安裝的package
+local_backup=&#x27;r_package_backup&#x27;
+#container上，R安裝的package都是裝到這邊。可用 .libPaths() 來查詢
+container_lib_path=&#x27;/usr/local/lib/R/site-library&#x27; 
+sudo docker run --rm \
+		-v ${local_backup}:${container_lib_path}
+		R -e &#x27;install.packages(&quot;tidyverse&quot;)&#x27;</code></pre></li></ul><ul id="63ccfb2a-d5db-4dda-9f83-c77c26d6da00" class="bulleted-list"><li style="list-style-type:disc">或是，</li></ul><ul id="bc7aa6c4-d1ea-4fe4-9e04-414a2b86f649" class="bulleted-list"><li style="list-style-type:disc">這也是用 renv 的功能，</li></ul><pre id="04b309a3-527e-4509-a9d7-1e2196fed278" class="code"><code></code></pre><p id="e3295f4e-e0b1-45bf-a621-a61382b2e3b0" class="">
+</p><h1 id="590ec97f-29ba-4cc1-aa8c-75dd8b384a84" class="">Best Practices</h1><p id="6b4856c2-2afa-4d9d-b18c-19294656d910" class="">目前看起來，最暴力但最簡單的做法是：</p><ul id="ee152b78-d78b-4d7d-890a-0ae1a7a74989" class="bulleted-list"><li style="list-style-type:disc">寫一個 Dockerfile，裡面是以 <code>rocker/rstudio</code> + shiny-server 的 image 做基底，然後再灌 <code>renv</code> 這個package，再包成 image。就叫 <code>hank/Rdev</code> image 好了</li></ul><ul id="b46acd09-5b35-4ea5-a912-7a253fadc6f7" class="bulleted-list"><li style="list-style-type:disc">在 run <code>hank/Rdev</code> 這個 image時，要 mount 以下這堆東西<ul id="20ed88d9-7375-424d-a8f9-b66b23d2a3c9" class="bulleted-list"><li style="list-style-type:circle">在本機開個資料夾(就當作是本機專案的資料夾，e.g. web_of_dg 資料夾)，然後把他 mount 到 container 空間的 <code>srv/shiny-server/web_of_dg</code>。</li></ul><ul id="9a3f6a2c-a256-4904-96e0-d4e9f2120f12" class="bulleted-list"><li style="list-style-type:circle">把本機的 var/log 和 container 的 log 給連結在一起</li></ul></li></ul><ul id="adb20502-1321-4be1-a0dd-423aab6ce17a" class="bulleted-list"><li style="list-style-type:disc">要做 port 對應，假設是 <code>-p 3456:3838</code> </li></ul><ul id="a5197e81-050f-46ef-bec1-08e401a4613c" class="bulleted-list"><li style="list-style-type:disc">進到RStudio Server後， <code>setwd(&quot;srv/shiny-server/web_of_dg&quot;)</code> ，就好像開啟 web_of_dg 這個專案一樣。</li></ul><ul id="65cfa077-8a47-48c5-8e38-48138bcac7be" class="bulleted-list"><li style="list-style-type:disc">在 web_of_dg 裡面，就像之前在測試區server的專案裡面一樣了，我要灌package，我就用 <code>renv::install()</code> ，那他就會灌到 <code>web_of_dg/renv</code> 裡面，然後因為 <code>web_of_dg</code> 這個資料夾和我的本機資料夾連動，所以我灌的 package 也都會保留在本機的 <code>web_of_dg/renv</code> 裡面</li></ul><ul id="92435821-fca1-413e-a85b-21af2a61fce4" class="bulleted-list"><li style="list-style-type:disc">如果開發過程中，安裝 R package，發現有 linux dependency的問題，需要安裝對應的 linux package，那就要重寫 <code>hank/Renv</code> 這個 image，在 RUN 的地方把這些 linux package給補上。</li></ul><ul id="18379749-dfbb-4a95-954f-a1e92e2a8e97" class="bulleted-list"><li style="list-style-type:disc">接著，我寫的 code ，都透過 git 連到 gitlab 上</li></ul><ul id="720cfe21-4d3c-436e-9d77-99980cc25481" class="bulleted-list"><li style="list-style-type:disc">我可以直接連到 <code>172.16.99.233:3456/web_of_dg</code> ，那就會幫我導到 container 裡的 3838/web_of_dg，然後啟動這個服務</li></ul><ul id="2fc519ed-974b-41eb-b545-ad7d7d685134" class="bulleted-list"><li style="list-style-type:disc">等到開發到一個段落了，要上線到正式區，這時就要到正式區，pull檔案下來，開container，run <code>hank/Rdev</code> 這個 image，並執行 renv::restore()，以及 port 對應。那就完成部署。</li></ul><ul id="3cb4372d-5716-4a7b-abf8-ec7f19468971" class="bulleted-list"><li style="list-style-type:disc">覺得最後這步實在太麻煩，且沒辦法自動化，再想想怎做。</li></ul><p id="9f959575-abd5-4fd7-95e5-23b5554e8bd2" class="">
+</p><ul id="2a398724-9bfd-445f-b520-f5fb878fe358" class="bulleted-list"><li style="list-style-type:disc">等到開發到一個段落了，我要部署了，我就要重寫一個 Dockerfile 來建立部署用 image:<ul id="0e724065-2ed5-4228-ad43-4908a0cc629e" class="bulleted-list"><li style="list-style-type:circle">FROM <code>rocker/shiny</code>  (以這個為基底)</li></ul><ul id="c5a4a81d-0792-44e0-8d85-e01a5e022f5f" class="bulleted-list"><li style="list-style-type:circle">RUN<ul id="8c336731-320f-4a84-aefe-d12dfe3c67f9" class="bulleted-list"><li style="list-style-type:square">linux dependency 的部分，把之前紀錄安裝過哪些linux package的檔案抓出來，複製貼上</li></ul><ul id="a31c4f47-991e-4837-87db-d0994669f230" class="bulleted-list"><li style="list-style-type:square">(可能不用) R package 的部分，就直接 copy 本機的 renv.lock 到 Dockerfile，要他安裝這些。</li></ul></li></ul><ul id="2f3f9eb4-cfe4-486b-81cd-fe30614b6c38" class="bulleted-list"><li style="list-style-type:circle">COPY: 把本機的 web_of_dg 資料夾copy一份到 <code>/srv/shiny-server</code> 下面</li></ul><ul id="304bee54-0234-4ada-ab83-5a02541a3584" class="bulleted-list"><li style="list-style-type:circle">那這個 Dockerfile 執行後的 image ，應該就可以跑我的 R code</li></ul></li></ul><ul id="b9c54828-f666-4fbd-a19c-c554e0c99584" class="bulleted-list"><li style="list-style-type:disc">開啟這個新image時，把剛剛本機的 web_of_dg ， mount 到 container 上，並設好 port 對應(e.g. 3456:3838)</li></ul><ul id="bd395f96-9d6b-43f6-b25a-281934b921ca" class="bulleted-list"><li style="list-style-type:disc">那只要連上 <code>172.16.99.233:3456/web_of_dg</code> ，就會導到 container 的 <code>3838/web_of_dg</code>，然後，這個資料夾裡 ui.R, server.R ，所以就會自動開啟 shiny 網頁。而這個網頁在跑時，有用到的 package，也都存在在 <code>web_of_dg/renv/library</code> 裡面</li></ul><p id="5aa80af9-6aac-442d-90d3-02fbb5e6e658" class="">
+</p></div></article></body></html>

@@ -1,0 +1,683 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>python Flask image</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="8943247b-fdcf-4f36-8fee-400f90b283fe" class="page sans"><header><h1 class="page-title">python Flask image</h1></header><div class="page-body"><h1 id="5d89ee73-aa5b-4c92-ad8e-8a55f36c5827" class="">1. 先在本機上做一個跑得起來的 flask</h1><ul id="6da6015a-ece7-469a-abeb-b168673374f3" class="bulleted-list"><li style="list-style-type:disc">我在以下路徑，做了一個 flask 專案： <code>/Volumes/GoogleDrive/我的雲端硬碟/Docker_Udemy/flask_try</code></li></ul><ul id="0ce55a1f-e750-46f5-bf37-fc849f118a2b" class="bulleted-list"><li style="list-style-type:disc">在這資料夾中，我新增一個 <a href="http://app.py"><code>app.py</code></a> ，內容如下：<pre id="e69b5c7d-1dc5-41df-8bf0-1c00d78a9fe7" class="code"><code>from flask import Flask
+
+app = Flask(__name__)  # 用Flask這個function，建立一個 web application 的 object，叫他 app
+# Flask() 是一個函數，裡面的 argument 放 __name__
+# __name__ 是 python 內建的變數，他會儲存目前這個程式在哪個模組下執行
+# 如果此程式被當主程式來執行，那 __name__的結果就是 &quot;__main__&quot; 這個字串
+
+# 用 decorator 來裝飾底下的 helloworld 函數
+# 如何裝飾？就是當user發出GET request，要求查看 &quot;/&quot; 下的檔案時，我會執行helloworld這個函數，並把結果回傳給user
+
+
+@app.route(&#x27;/&#x27;)
+def helloworld():
+    return &quot;hello world&quot;
+
+
+if __name__ == &quot;__main__&quot;:  # 如同上述，這邊就是在檢查 __name__ 這個變數的結果是不是 &quot;__main__&quot;
+    app.run(
+        host=&quot;0.0.0.0&quot;,  # 允許訪問的主機IP，設為 0.0.0.0 表示所有主機的意思，這樣所有主機都可以訪問我的 app
+        port=5000
+    )</code></pre></li></ul><ul id="35e0343d-4dbe-4625-841b-c59204e041e7" class="bulleted-list"><li style="list-style-type:disc">重點在最後三行，為了讓這個服務可以被外部主機訪問，host把它設為 <code>0.0.0.0</code> </li></ul><ul id="33e9da61-327e-4a10-8d71-9e0294d3ce0b" class="bulleted-list"><li style="list-style-type:disc">寫好這個 <a href="http://app.py"><code>app.py</code></a> 後，在 terminal 執行以下指令，就把這支 app 給起起來了：<pre id="26615a49-a44c-488b-8754-9734e752e29b" class="code"><code>cd /Volumes/GoogleDrive/我的雲端硬碟/Docker_Udemy/flask_try
+python app.py</code></pre></li></ul><ul id="12cac2fa-85b0-4d08-ae6c-54b9d1f8cdae" class="bulleted-list"><li style="list-style-type:disc">看一下截圖：<figure id="f4d4a89c-9af2-4bf3-9dc5-26b376060577" class="image"><a href="python%20Flask%20image%208943247bfdcf4f368fee400f90b283fe/Untitled.png"><img style="width:589px" src="python%20Flask%20image%208943247bfdcf4f368fee400f90b283fe/Untitled.png"/></a></figure></li></ul><ul id="ec1748df-904d-47ce-8b13-fceeb6cc648c" class="bulleted-list"><li style="list-style-type:disc">就如截圖上寫的，只要在 browser 上寫 <a href="http://0.0.0.0:5000"><code>http://0.0.0.0:5000</code></a> ，就可以看到網頁。</li></ul><p id="61df0047-9743-461e-9b38-eb540abbfa2f" class="">
+</p><h1 id="e3033d0d-9aa9-468e-9329-173a11569533" class="">2. 寫成 image  </h1><ul id="008e320a-3815-43df-b4ab-b9c41e92be38" class="bulleted-list"><li style="list-style-type:disc">接下來，我們就把這個 網頁app，當成我要部署的應用。然後我想包成一個 docker image 來發布</li></ul><ul id="68d1f7aa-0416-4f63-a634-a3ce87eaf38d" class="bulleted-list"><li style="list-style-type:disc">首先，寫 dockerfile，我就在這個專案資料夾下，新增一個 Dockerfile，內容如下：</li></ul><pre id="600d3100-f97d-4acb-afaf-49e2ceae421a" class="code"><code>FROM python:3.9.5-slim
+RUN pip install flask
+WORKDIR /src
+COPY app.py ./
+CMD python app.py</code></pre><ul id="06244708-4388-4249-a35a-c1f40de545ff" class="bulleted-list"><li style="list-style-type:disc">可以發現，指令都蠻簡單的：<ul id="8f67c2b1-7d29-4612-9c39-1c626541aa0a" class="bulleted-list"><li style="list-style-type:circle">我先下載 python 的 image</li></ul><ul id="f19c500a-c6c1-4104-8dde-1e4412ed2185" class="bulleted-list"><li style="list-style-type:circle">安裝 flask 這個套件</li></ul><ul id="8f709bce-63f3-46d2-8871-a82b5cf90c9d" class="bulleted-list"><li style="list-style-type:circle">把工作目錄設在 <code>/src</code> </li></ul><ul id="d195ff9f-2d6f-416d-8df4-b3f20a656e87" class="bulleted-list"><li style="list-style-type:circle">把本機的 <a href="http://app.py">app.py</a> ，複製到 container 裡的工作目錄下 (就是 <code>/src</code> 下)</li></ul><ul id="8bfc62c0-fb4e-4dad-861e-ca6236bf642e" class="bulleted-list"><li style="list-style-type:circle">執行 <code>python app.py</code> 來開啟服務</li></ul></li></ul><ul id="42d6366a-ee0c-4844-a440-69b901aac73b" class="bulleted-list"><li style="list-style-type:disc">寫好後，就來 build image，在 terminal 裡面下：<pre id="bf3d7d44-7251-4014-84f1-235038fb5c0d" class="code"><code>docker image build -t cktottti/docker_flask_try .</code></pre></li></ul><ul id="c1f37ae0-b315-4135-896f-788430c810f4" class="bulleted-list"><li style="list-style-type:disc">寫好後，開 container 來跑他：<pre id="f6a0ef20-3937-4281-8b66-e7ddc7f5f9d0" class="code"><code>docker container run -p 5678:5000 cktottti/docker_flask_try</code></pre></li></ul><ul id="9f4a690a-279a-42a2-b9f1-0b7ed0227f96" class="bulleted-list"><li style="list-style-type:disc">這邊要注意的，是 port 的對應，我讓本機的 5678，對到 container 裡的 5000 (因為 <a href="http://app.py">app.py</a> 裡面是設定 port 為 5000)</li></ul><ul id="d95bc519-4287-4d9f-969f-34aafd0a4151" class="bulleted-list"><li style="list-style-type:disc">那就成功開啟服務了，看截圖：<figure id="13d12c1a-5c6d-4027-8e17-cb5f37f14ef1" class="image"><a href="python%20Flask%20image%208943247bfdcf4f368fee400f90b283fe/Untitled%201.png"><img style="width:630px" src="python%20Flask%20image%208943247bfdcf4f368fee400f90b283fe/Untitled%201.png"/></a></figure></li></ul><ul id="0686efad-b847-430a-b3b0-d621c38b745b" class="bulleted-list"><li style="list-style-type:disc">那這邊要注意的是，我並不是用瀏覽器去連上面寫的 <a href="http://172.17.0.2:5000"><code>http://172.17.0.2:5000</code></a> ，因為這是 container 裡面才是這樣。我現在是要從瀏覽器先連到我的 mac 主機，然後我的 mac 主機，會自動導到 <a href="http://172.17.0.2:5000"><code>http://172.17.0.2:5000</code></a> 這邊</li></ul><ul id="97faadc7-a53b-452a-8810-ed53efc7360a" class="bulleted-list"><li style="list-style-type:disc">那我 mac 主機 的 ip 是啥？就是 <code>0.0.0.0</code> ，然後 port 是 5678，所以我就連到 <a href="http://0.0.0.0:5678"><code>http://0.0.0.0:5678</code></a> ，得到以下結果：<figure id="dc24b683-6205-4b21-a50e-20bad6111ed8" class="image"><a href="python%20Flask%20image%208943247bfdcf4f368fee400f90b283fe/Untitled%202.png"><img style="width:528px" src="python%20Flask%20image%208943247bfdcf4f368fee400f90b283fe/Untitled%202.png"/></a></figure></li></ul><ul id="d0dd9ae0-5c46-4464-9362-85449bb57846" class="bulleted-list"><li style="list-style-type:disc">container 的 terminal 也顯示，有人跟他下 get 了：<figure id="ad6c52fd-b409-4034-996f-e78e198cefee" class="image"><a href="python%20Flask%20image%208943247bfdcf4f368fee400f90b283fe/Untitled%203.png"><img style="width:650px" src="python%20Flask%20image%208943247bfdcf4f368fee400f90b283fe/Untitled%203.png"/></a></figure></li></ul><ul id="7c24f9d7-c1dc-4efb-9d9c-20f0e55ba057" class="bulleted-list"><li style="list-style-type:disc"></li></ul></div></article></body></html>

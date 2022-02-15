@@ -1,0 +1,696 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>CH2: 在不同OS上使用Docker</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="dd8c4e87-6eee-4ef2-ac43-fcd4282842e2" class="page sans"><header><h1 class="page-title">CH2: 在不同OS上使用Docker</h1></header><div class="page-body"><h2 id="f1aaad00-422b-4714-b549-5ad5e1c1e361" class="">2.0 本章節所有程式碼匯總</h2><pre id="9cce5ef0-ef00-4797-8757-636097aac027" class="code"><code># 安裝docker  
+cat /etc/os-release # 查看/確認目前的os版本資訊
+sudo yum install docker -y # yum是centos的裝法 -y指同意所有default設定
+
+# 開啟服務
+sudo service docker start
+
+# 示範使用docker image
+sudo docker images # 看local端有哪些docker images，發現沒有
+sudo docker pull hello-world # 去docker hub抓hello-world這個image  
+sudo docker images # 確認local端已有hello-world這個image
+sudo docker run hello-world # 會去執行本地的hello-world這個image  
+
+# 關閉服務
+sudo service docker stop</code></pre><h2 id="8b8ba083-e3c3-4018-9a4e-1eff68385a38" class="">2.1 Intro</h2><ul id="84652faa-0d8d-426e-834e-07f993b82b23" class="bulleted-list"><li style="list-style-type:disc">這章會簡單示範一次，分別在Linux, Mac, Windows上，如何使用docker</li></ul><h2 id="e85ab7ea-c0ca-4f42-9452-4327a4327ffe" class="">2.2 觀念講解</h2><ul id="da6ff1ba-01a3-4ea9-aa18-d7eddc4fa4f9" class="bulleted-list"><li style="list-style-type:disc">上一章有講過，docker的意思，就是在現有的OS上，架一個docker engine，有了這個docker engine後，就可以開container，然後把docker hub上面的image下載下來，丟到container中去執行</li></ul><ul id="7c8ce0a1-f549-4bb5-aceb-6652db936eaa" class="bulleted-list"><li style="list-style-type:disc">所以，這一章說的：如何使用docker，其實就在教如何架一個docker engine</li></ul><ul id="f26d7c62-1122-4d6a-bbd9-2e7da551e673" class="bulleted-list"><li style="list-style-type:disc">先講結論：docker engine只能架在linux上，所以如果是mac/windows，就要先開個虛擬機(VM)，在這個虛擬主機上安裝linux，然後進入這個linux後，才開始架docker engine</li></ul><ul id="15283d35-7e43-4db9-8b45-093c2c096ea8" class="bulleted-list"><li style="list-style-type:disc">講師的圖解概念很清楚，請看下圖：<figure id="49b85514-a258-41d7-8a60-1a8b40992c70" class="image"><a href="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/2_1_osDocker.jpg"><img style="width:1212px" src="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/2_1_osDocker.jpg"/></a></figure></li></ul><ul id="82bf7ec0-62c5-43b3-b196-4466d41f432c" class="bulleted-list"><li style="list-style-type:disc">可以注意到，圖形的下半部，mac/windos都要透過virtual Box來建立linux後，才執行docker</li></ul><ul id="b291475d-bc97-48f0-84fb-36799e1cac44" class="bulleted-list"><li style="list-style-type:disc">那…我原本以為，左邊那條路(Virtual Box)，就是我之前在上linux的課時，直接用Oracle VM VirtualBox這個軟體，在Mac上安裝一個centOS7的虛擬機，然後我們再用這個虛擬機來執行docker。那當然這樣也沒問題，就像真的在linux上做事，而如果你要使用檔案的話，也只能使用linux主機上的檔案(換句話說，如果你想執行從別人那邊下載過來的Dockerfile，那得先把這個檔案，從自己的mac/windows，傳到linux主機上的資料夾，才可以開始run)</li></ul><ul id="9913f459-492f-421a-b4f4-92e375cf3196" class="bulleted-list"><li style="list-style-type:disc">但其實這張圖的左路的Virtual Box，是指docker幫你做好的虛擬機(可去Docker網站上找Docker Toolbox來下載)，安裝完後，會有他專屬的terminal，然後一打開terminal，就可以執行docker的指令了。所以可以想成這個toolbox提供給你的terminal，就是一路幫你串到linux後所打開的shell，所以你可以繼續用自己的mac/windows的檔案系統做事，這就比我原先設想的方便多了</li></ul><ul id="d8a4d668-ee06-4e03-a2fd-aafac2d8b942" class="bulleted-list"><li style="list-style-type:disc">那對Mac用戶來說，右邊那條路就更友善了(Docker網站上有提供Docker Desktop可以下載)。只要安裝完Docker Desktop，那打開此應用程式，他就會有dashboard讓你看你現在有哪些container, image等訊息，而且，自動幫你連線好，此時，只要打開原本的mac shell，就可以直接執行docker指令，不需要再去用剛剛左路的那種特製terminal了</li></ul><ul id="33e07800-9027-4bb3-ab75-7411599d8364" class="bulleted-list"><li style="list-style-type:disc">所以，以下的節次，會先示範linux的做法(我就在mac上的centOS7虛擬機上操作，來模擬一般在公司時直接操作linux的情境)，然後示範mac上用Docker desktop的做法。至於windows，我就先懶惰不整理了。</li></ul><ul id="376ec693-b980-4e3a-a57e-3fd4606d35a9" class="bulleted-list"><li style="list-style-type:disc">之後的章節，則一併用mac docker desktop的模式做示範。</li></ul><h2 id="1b42f452-e836-47b9-af51-63e0d62d8bd3" class="">2.3 實作示範</h2><ul id="2440f358-dfcd-427d-8e88-796dea499a63" class="bulleted-list"><li style="list-style-type:disc">我這邊偷懶只示範linux的操作，更具體的說，是用我的mac上的虛擬機：centOS(帳號：tom-hanks; 密碼：19002329)來做操作</li></ul><ul id="c5a15ced-08b1-4f20-b369-20140d1e95ae" class="bulleted-list"><li style="list-style-type:disc">對於Mac的操作，講師還有示範docker toolbox和docker desktop兩種方式，看起來也蠻不錯的</li></ul><ul id="d6392eb3-8dcb-4b67-a510-961f135cfda9" class="bulleted-list"><li style="list-style-type:disc">講師也有介紹在windows上用docker toolbox，但，我就先沒整理了</li></ul><h3 id="0e677c58-14ee-47ff-972f-4a6fdca73555" class="">2.3.1 Linux示範</h3><ul id="aef0b0a5-0d43-4527-995d-3f831f40282b" class="bulleted-list"><li style="list-style-type:disc">以下的操作，是我進入我的mac上的虛擬機：centOS(帳號：tom-hanks; 密碼：19002329，有灌UI的版本)，所做的操作。可以直接類比成在linux主機上的操作</li></ul><h3 id="f1cc3d97-b656-4cf0-a0c4-5229db4719c4" class="">2.3.1.1 安裝docker</h3><ul id="e0771614-b4d1-4878-b68d-5129131c634e" class="bulleted-list"><li style="list-style-type:disc">首先，使用<code>cat /etc/os-release</code>查看/確認一下目前的os版本<figure id="d8f25825-8ae3-48b8-b985-5a37fb2f0664" class="image"><a href="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_1_os.jpg"><img style="width:640px" src="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_1_os.jpg"/></a></figure></li></ul><ul id="57b4bd54-a49e-488b-9796-5f47a5d6e96f" class="bulleted-list"><li style="list-style-type:disc">接著，使用<code>sudo yum install docker -y</code>，安裝docker。注意，<code>y</code>是指同意所有預設安裝步驟，每個步驟就別再問y/n了</li></ul><ul id="92c7ac8f-99bb-4f65-92b8-26d26759ed7c" class="bulleted-list"><li style="list-style-type:disc">因為執行後的畫面頗多，我就只擷取最前面的結果，反正最後就是complete!<figure id="1bb95fea-b2f1-4890-a278-dd64c62e7201" class="image"><a href="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_2_docker.jpg"><img style="width:673px" src="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_2_docker.jpg"/></a></figure></li></ul><h3 id="561f674a-cc61-48f5-91ae-8eb3237e0f8d" class="">2.3.1.2 啟動docker</h3><ul id="79d9dc09-88d9-4339-8aff-173f92192fbe" class="bulleted-list"><li style="list-style-type:disc">使用 <code>sudo service docker start</code> 來開啟docker服務。這邊可以學一下linux的寫法，service在linux中是指要啟動某個特定服務，‘這邊的服務就是後面寫的docker<figure id="6189fc4f-0f7b-4f1d-87d0-3dbc48ebe534" class="image"><a href="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_3_docker.jpg"><img style="width:661px" src="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_3_docker.jpg"/></a></figure></li></ul><h3 id="dae21f73-6d78-4fd8-8766-3eb2d8d91355" class="">2.3.1.3 跑一個image看看</h3><ul id="ca13a92b-ba90-4976-b088-162f01377ecb" class="bulleted-list"><li style="list-style-type:disc">先看看現在local端有什麼docker images: <code>sudo docker images</code>，發現空空如也</li></ul><ul id="5637178a-34e4-4f8d-8f83-9c8be3c53b46" class="bulleted-list"><li style="list-style-type:disc">所以，去docker hub下載一個image來玩玩(下載hello-world吧)： <code>sudo docker pull hello-world</code></li></ul><ul id="d58a1c8e-1481-44e5-a9f8-df7cc17ce7fa" class="bulleted-list"><li style="list-style-type:disc">下載好後，再確認一次，local端已經有hello-world的docker image了： <code>sudo docker images</code><figure id="7747e9b3-c9e9-4fd6-ad4b-2c2cfe0d380d" class="image"><a href="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_4_image.jpg"><img style="width:1195px" src="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_4_image.jpg"/></a></figure></li></ul><ul id="d324034f-f24c-4d7b-8e7f-436d3dd6d429" class="bulleted-list"><li style="list-style-type:disc">run一下這個image，看會怎麼樣： <code>sudo docker run hello-world</code></li></ul><ul id="003d1dc8-ef6c-4f00-8155-79cebe998075" class="bulleted-list"><li style="list-style-type:disc">最後，關閉這個服務： <code>sudo service docker stop</code><figure id="0017398d-bbff-4c57-bcdb-f1ab913c11cc" class="image"><a href="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_5_image.jpg"><img style="width:1043px" src="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_5_image.jpg"/></a></figure></li></ul><p id="fd7605c3-af96-46b6-af14-cc8dd6b1cd00" class=""><strong>2.3.1.4 程式碼匯總</strong>
+</p><pre id="68565a0d-1a64-4884-9a46-79b34ece7b00" class="code"><code># 安裝docker  
+cat /etc/os-release # 查看/確認目前的os版本資訊
+sudo yum install docker -y # -y指同意所有default設定
+
+# 開啟服務
+sudo service docker start
+
+# 示範使用docker image
+sudo docker images # 看local端有哪些docker images，發現沒有
+sudo docker pull hello-world # 去docker hub抓hello-world這個image  
+sudo docker images # 確認local端已有hello-world這個image
+sudo docker run hello-world # 會去執行本地的hello-world這個image  
+
+# 關閉服務
+sudo service docker stop</code></pre><p id="4ace1c5a-f952-42ef-9546-2bd3fbc0f051" class="">
+</p><h3 id="9cd72cb1-7298-4709-8bd9-a6519476bd75" class="">2.3.2 mac示範</h3><ul id="4b501f1f-c725-4e69-8bc7-2973b6d08cfb" class="bulleted-list"><li style="list-style-type:disc">首先，google搜尋“mac docker desktop”，可以找到docker hub上的 <a href="https://hub.docker.com/editions/community/docker-ce-desktop-mac">連結</a>  </li></ul><ul id="29bde6b9-ffe0-4bdf-8f58-5cb5ed07d378" class="bulleted-list"><li style="list-style-type:disc">透過以下截圖的步驟，下載docker desktop<figure id="16182818-1b24-4f69-9370-7cbe4ed4bfdb" class="image"><a href="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_6_mac_docker_desktop.jpg"><img style="width:2040px" src="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_6_mac_docker_desktop.jpg"/></a></figure></li></ul><ul id="30fcceb9-a387-46ab-9a5e-ee9e14141a56" class="bulleted-list"><li style="list-style-type:disc">這邊要注意的是，第一步時，我先登入我的帳號(cktottti, 密碼是公司版密碼最後一碼是shift_1)。第3步時，要確認macOS的版本大於10.14(我的是10.15.7)。然後就可以順順的下載了</li></ul><ul id="f84aa7d8-6e55-4824-ae95-da25c6cccdce" class="bulleted-list"><li style="list-style-type:disc">下載完並安裝好後，以後每次要執行docker，就可以用<code>command+space</code>，搜尋“Docker”，然後打開<figure id="71c2f421-946d-447a-9847-63d5c2283c95" class="image"><a href="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_7_open_mac_docker_desktop.jpg"><img style="width:1354px" src="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_7_open_mac_docker_desktop.jpg"/></a></figure></li></ul><ul id="b08a89b9-0485-4306-aed3-96d5f2491983" class="bulleted-list"><li style="list-style-type:disc">打開後可以看到下圖</li></ul><figure id="a08349d4-b992-4d60-86c3-6a3f173d3092" class="image"><a href="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_8_mac_docker_dashboard.jpg"><img style="width:2048px" src="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_8_mac_docker_dashboard.jpg"/></a></figure><ul id="4bca85e9-756e-41c5-8bd4-04a90833bcbc" class="bulleted-list"><li style="list-style-type:disc">可以看到帳號已登入，也連線成功，左側可選image或container，來看dashboard</li></ul><ul id="6dd6258b-3bdc-4aa5-a391-38228786c72b" class="bulleted-list"><li style="list-style-type:disc">到此為止，我們可以知道，原本在linux上做的這三件事：</li></ul><pre id="78f5a01d-6e4b-4e47-855a-03c1e189e3e6" class="code code-wrap"><code># 安裝docker
+cat /etc/os-release # 查看/確認目前的os版本資訊
+sudo yum install docker -y # -y指同意所有default設定
+
+# 開啟服務
+sudo service docker start</code></pre><ul id="b9e17d49-18fd-4857-8a28-9f7bcfb900be" class="bulleted-list"><li style="list-style-type:disc">現在就變成在UI上安裝docker desktop，在UI上開啟docker這兩件事了</li></ul><ul id="e4b1c139-557a-4e44-b67c-4b93f829e0b7" class="bulleted-list"><li style="list-style-type:disc">那接下來，我們只要開啟mac的terminal，就可以完全複製剛剛在linux上的操作(而且因為mac只有單一用戶，所以也不用再下sudo這個指令了)：</li></ul><pre id="2ac1c353-46d0-4eda-a3d6-816a1dd2d52e" class="code code-wrap"><code># 示範使用docker image
+docker images # 看local端有哪些docker images，發現沒有
+docker pull hello-world # 去docker hub抓hello-world這個image
+docker images # 確認local端已有hello-world這個image
+docker run hello-world # 會去執行本地的hello-world這個image</code></pre><ul id="26a714b5-86ee-41fb-babe-7f2e6b94c787" class="bulleted-list"><li style="list-style-type:disc">附上截圖：<figure id="ae1e078f-89b5-43a6-85e4-c5e662f191dc" class="image"><a href="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_9_docker_command_on_mac.jpg"><img style="width:832px" src="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_9_docker_command_on_mac.jpg"/></a></figure></li></ul><ul id="1a255df6-effd-4196-a95d-fda42d0a1281" class="bulleted-list"><li style="list-style-type:disc">可以發現，都執行得很順利。我們再回頭看一下dashboard，可以發現image這邊有新增結果了：<figure id="9516e37b-61f6-41e9-a67d-8be6d32b4726" class="image"><a href="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_10_img_dashboard.jpg"><img style="width:2048px" src="CH2%20%E5%9C%A8%E4%B8%8D%E5%90%8COS%E4%B8%8A%E4%BD%BF%E7%94%A8Docker%20dd8c4e876eee4ef2ac43fcd4282842e2/ch2_10_img_dashboard.jpg"/></a></figure></li></ul></div></article></body></html>

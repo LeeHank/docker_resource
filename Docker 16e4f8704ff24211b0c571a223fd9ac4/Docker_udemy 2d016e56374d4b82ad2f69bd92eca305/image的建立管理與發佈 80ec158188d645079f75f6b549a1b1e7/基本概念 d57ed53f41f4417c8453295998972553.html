@@ -1,0 +1,661 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>基本概念</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="d57ed53f-41f4-417c-8453-295998972553" class="page sans"><header><h1 class="page-title">基本概念</h1></header><div class="page-body"><p id="54746e85-e0e5-4a98-9be4-4d9151213286" class="">
+</p><ul id="6f86bb0d-811c-4d15-8156-002db554f727" class="bulleted-list"><li style="list-style-type:disc">以下這張圖超清楚的：</li></ul><figure id="9394b57a-1a7c-4208-94ae-6e948d1a0c63" class="image"><a href="%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%20d57ed53f41f4417c8453295998972553/Untitled.png"><img style="width:624px" src="%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%20d57ed53f41f4417c8453295998972553/Untitled.png"/></a></figure><ul id="389e09d2-1b36-4c76-b09c-839741fe9e2e" class="bulleted-list"><li style="list-style-type:disc">今天的焦點在，中間的這個 image，可以怎麼來？</li></ul><ul id="00be20ff-1d11-4647-958c-4109627ee361" class="bulleted-list"><li style="list-style-type:disc">分成四種做法：<ul id="092c2c6d-30e1-4bfb-b5df-9fcccc4b48e4" class="bulleted-list"><li style="list-style-type:circle">法一：從 docker registry pull 到我的電腦裡 (圖片右上角)</li></ul><ul id="e3ffd5aa-b750-47ac-8994-e2630658af5b" class="bulleted-list"><li style="list-style-type:circle">法二：從我的電腦的 dockerfile 中， build 一個 image 出來</li></ul><ul id="95d9b372-34e8-41bf-b7b7-88b70647b97e" class="bulleted-list"><li style="list-style-type:circle">法三：從我的電腦中的某個 local 資料夾， load 一個存好的 backup.tar 文件</li></ul></li></ul><h1 id="cf2c588d-cca0-4c17-8079-d9f49230d84b" class="">1. 從 docker registry 中 pull image 下來</h1><ul id="b3c24a5f-ffa9-43a1-9e35-9256ffcff64e" class="bulleted-list"><li style="list-style-type:disc">這是最省力的做法</li></ul><ul id="0243c3a9-6cd8-4e41-972b-89c6e9cb8a0f" class="bulleted-list"><li style="list-style-type:disc">docker registry可以分成<ul id="08f5979f-871c-4482-a334-6432faa3bae5" class="bulleted-list"><li style="list-style-type:circle">public: 公開的雲端空間，讓你下載 image，例如 dockerhub</li></ul><ul id="523dda57-d90a-4a2d-a4df-bde2b8ba6494" class="bulleted-list"><li style="list-style-type:circle">internal: 公司內部的雲端空間，通常都是先經過資安程序，把常用的image，先拉到公司自己的雲端空間後，你再去公司的這個雲端空間拉你要的 image。</li></ul></li></ul><ul id="21ffb5bf-625e-4da3-bec0-d67c7c472800" class="bulleted-list"><li style="list-style-type:disc">作法上，其實之前 hahow 那邊的課都學過了，看 <a href="../../Docker%201ccabc071f704ee58d4a9338ab2eee12/CH5%20%E5%BB%BA%E7%AB%8B%E8%88%87%E4%BD%BF%E7%94%A8Docker%20image%20748a0d69c28f42c5adce3686c8a0e0d6.html">這裡</a> 就好</li></ul><h1 id="4ad3e4c9-fd92-4703-a3af-f0f05d0e9dc3" class="">2. 把 image 寫成 <code>.tar</code> 檔後，用 load</h1><ul id="a7bda6e8-8ba0-4b40-b75a-20deced6fcca" class="bulleted-list"><li style="list-style-type:disc">這邊的情境是這樣，如果你今天的工作環境是不能上網的，那就無法用 dockerhub 之類的方式來取得 image。</li></ul><ul id="006fa455-f0b8-4195-be30-379efe95d5e7" class="bulleted-list"><li style="list-style-type:disc">那簡單的想法就是<ul id="40dac4ad-c462-4168-b793-d19ee5be71e2" class="bulleted-list"><li style="list-style-type:circle">我先在一台可以上網的電腦，去把我要的 image 給 pull 下來。</li></ul><ul id="7dc75fae-4123-445e-90a9-8acb06eabb9d" class="bulleted-list"><li style="list-style-type:circle">然後，我把這個 image 寫成一個檔案。</li></ul><ul id="3130021e-7949-42fe-be78-855eb9bc169c" class="bulleted-list"><li style="list-style-type:circle">接著，我用隨身碟之類的方式，把這個檔案，移到那台不能上網的電腦上</li></ul><ul id="57372b84-9bb1-4825-b65f-dc81a2a32290" class="bulleted-list"><li style="list-style-type:circle">最後，我就在這台不能上網的電腦上，用 <code>load</code> 的方式，去使用這個 image</li></ul></li></ul><ul id="c1f66522-2da7-4d83-9b80-3c1d1d42bbc1" class="bulleted-list"><li style="list-style-type:disc">來實際操作一次：</li></ul><p id="6137b1ff-3ba0-4315-a59b-e5ef00c69ced" class="">
+</p><h1 id="2a99d585-3875-4b44-9033-76c6cfa719c3" class="">3. 用自己寫的 dockerfile 去 build 出 image</h1><ul id="6352cf9d-b20a-467f-bd38-d581cfbaffdd" class="bulleted-list"><li style="list-style-type:disc">這是最常用的做法</li></ul><ul id="95f8285b-278b-41fe-952a-785169c6647a" class="bulleted-list"><li style="list-style-type:disc">講師在這邊寫了一個 toy example，我覺得蠻好的，記錄一下。</li></ul><ul id="7b61b008-4c9f-4984-b72d-9214efee5d5f" class="bulleted-list"><li style="list-style-type:disc"></li></ul><p id="abd72d38-22f8-4c56-9e10-8adb1b5b5bf5" class="">
+</p><h1 id="fd9fffda-e4b2-4a1b-b9cc-3ca5954cecb3" class="">4. 在 container 操作完一切後，再 commit 出 image</h1><ul id="211b0f73-dd11-45c6-8975-3771b189450e" class="bulleted-list"><li style="list-style-type:disc">這個方法也蠻少用的，但蠻酷的，紀錄一下。</li></ul><ul id="5a2824d9-e152-4476-b4a7-7d07d7c60c60" class="bulleted-list"><li style="list-style-type:disc">假設我今天開一個 container ，裡面跑的 image，就只是單純的 ubuntu</li></ul><ul id="52084d0d-9166-44d1-9ff7-f12c915afd7b" class="bulleted-list"><li style="list-style-type:disc">那我進到這個 container 後，我可以去安裝 python，並新增一個 &quot;hello.py&quot; 的檔案</li></ul><ul id="086a173b-7a83-4823-9a30-6b8b8024980e" class="bulleted-list"><li style="list-style-type:disc">那如果我希望目前這個環境 (ubuntu + python + 一個 <a href="http://hello.py">hello.py</a> 檔案)，可以包成 image，除了自己寫一個 dockerfile 外，我還可以用 commit 的方式，把目前的 container 裡面的環境給 commit 出一個 image</li></ul><ul id="0e0f0ed8-ebcc-428d-8746-3283ea40cd64" class="bulleted-list"><li style="list-style-type:disc">作法如下：<ul id="479ddecc-3896-42ae-b1af-74615da3bdeb" class="bulleted-list"><li style="list-style-type:circle">先開一個 container ，用 interactive 模式，進去這個 container 裡 (e.g. <code>docker container run -it ubuntu sh</code>  )。這邊提醒一下，沒有說一定要在這邊就用 interactive，你也可以先開 container 後，再用 <code>docker exec -it {container_id}</code> 進去。</li></ul><ul id="df5ce64b-d001-42b4-a0b9-0ab5146d71a7" class="bulleted-list"><li style="list-style-type:circle">在 shell 中，安裝 python，新增 <a href="http://hello.py">hello.py</a> 檔案</li></ul><ul id="ca10a302-1b0b-495a-959b-c53be2749a4e" class="bulleted-list"><li style="list-style-type:circle">exit, 退出 interactive 模式</li></ul><ul id="97cab54b-af3d-4fda-a9e7-6f44e00e78ff" class="bulleted-list"><li style="list-style-type:circle">這時，這個 container 的狀態，是停止的，但沒有被刪除，你用 <code>docker container ls -a</code> 可以看到這個 container id。</li></ul><ul id="cfc031c4-05e9-4149-a67e-e79204a7e511" class="bulleted-list"><li style="list-style-type:circle">最後，做 </li></ul><pre id="3096ab77-bea7-479c-bd87-97f839af9047" class="code"><code>docker container commit {container_id} {def_image_name}
+# 例如： docker container commit 75e035739753 cktottti/my_python_demo</code></pre><ul id="983fe429-2f58-40bf-842d-36eea6bbf5f9" class="bulleted-list"><li style="list-style-type:circle">這樣就完成了。那這樣做的缺點是，你只是把環境寫成 image。沒辦法像 dockerfile 一樣，不只把環境包好，還可以寫接下來要做啥 (e.g. 最後要做 <code>python </code><a href="http://hello.py"><code>hello.py</code></a> )</li></ul></li></ul><ul id="269ad97e-6b7e-4941-a394-5d8e528825cc" class="bulleted-list"><li style="list-style-type:disc">法一，從 docker registry 來 pull:<ul id="e42764fe-38c9-481f-aaf8-54d0b8456c11" class="bulleted-list"><li style="list-style-type:circle">這個 registry 可以是 public 的 (e.g. dockerhub)，或是公司內網中自己架的 registry(e.g. wnc/dockerhub)。</li></ul><ul id="080f6967-a15c-4f32-aad9-eb6002e09487" class="bulleted-list"><li style="list-style-type:circle">但總之，他一定不在你的主機上，他是在外部。所以你必須 <code>聯網</code> ，才能去下載到這些 image</li></ul></li></ul><ul id="282e9425-6d56-44ca-a672-c3126494eee9" class="bulleted-list"><li style="list-style-type:disc">法二：從我自己電腦的 dockerfile 來 build 出 image</li></ul><ul id="9e1885ae-be76-498e-9da2-317e1d55544a" class="bulleted-list"><li style="list-style-type:disc">法三：</li></ul></div></article></body></html>

@@ -1,0 +1,708 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Docker處理</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="9f37b724-3dfa-4b48-9aed-70f348c703d0" class="page sans"><header><h1 class="page-title">Docker處理</h1></header><div class="page-body"><h1 id="b85af68f-3ddd-455b-a9af-144a8e06a9a2" class="">1. 登入的dockerhub</h1><p id="d65d9e08-8959-414c-941a-b5d30512bf2f" class=""><code>docker login h ttps://harbor.wnc.com.tw -u 10704009 -p &#x27;you should not pass&#x27;</code></p><h1 id="880beea3-bf3a-4893-a14a-4a336db5e060" class="">2. pull image方式</h1><ul id="78472f5b-967e-4222-97b2-250bcd37aa55" class="bulleted-list"><li style="list-style-type:disc">要記得在dockerhhub的image前面，加上harbor.wnc.com.tw/dockerhub，例如</li></ul><pre id="28418066-fed6-4488-a607-fa27b4eef2e6" class="code"><code>docker pull harbor.wnc.com.tw/dockerhub/rocker/rstudio:4.0.4
+docker pull harbor.wnc.com.tw/dockerhub/asachet/rocker-tidymodels</code></pre><h1 id="c6a05fae-d4c3-427d-a9a7-62071ecef9a1" class="">3. 重寫 Dockerfile</h1><ul id="ec6bcb98-7067-45f9-8f95-28892b72c8c9" class="bulleted-list"><li style="list-style-type:disc">在以下路徑有範本: <code>/home/hadoop/EDSA/dockerR_Hank</code></li></ul><ul id="c77fd48b-3e0a-4195-9877-92d1cc41bdca" class="bulleted-list"><li style="list-style-type:disc">Dockerfile的內容如下：</li></ul><pre id="054facd2-c664-4d6c-a243-ba14c5257f4e" class="code"><code>FROM harbor.wnc.com.tw/dockerhub/rocker/rstudio:4.0.4
+# FROM harbor.wnc.com.tw/dockerhub/asachet/rocker-tidymodels
+
+#設定 proxy
+ENV http_proxy=&#x27;http://172.16.100.51:3128&#x27;
+ENV https_proxy=&#x27;http://172.16.100.51:3128&#x27; 
+
+#安裝 renv，指定 cloud.r
+RUN R -e &#x27;install.packages(&quot;renv&quot;,repos=&quot;https://cloud.r-project.org&quot;)&#x27;
+
+#設定 Java參數
+ENV JAVA_HOME=/usr/java/jdk1.8.0_152
+ENV JAVA_JRE=&quot;/usr/java/jdk1.8.0_152/jre/bin&quot;
+ENV PATH=&quot;/usr/java/jdk1.8.0_152/bin:$PATH&quot;
+ENV PATH=&quot;/usr/java/jdk1.8.0_152/jre/bin:$PATH&quot;
+ENV JAVA_CPPFLAGS=&quot;-I/usr/java/jdk1.8.0_152/include -I/usr/java/jdk1.8.0_152/include/linux&quot;
+ENV JAVA=&quot;$JAVA_HOME/bin/java&quot;
+ENV JAVA_LIBS=&quot;-L/usr/java/jdk1.8.0_152/jre/lib/amd64/server -ljvm&quot;
+ENV LD_LIBRARY_PATH=$JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server:/usr/local/lib
+
+
+#設定 renv global cache
+RUN   echo &quot;RENV_PATHS_CACHE=/shared_package&quot; &gt;&gt; /usr/local/lib/R/etc/Renviron
+
+#設定使用者
+RUN useradd -u 1004 -ms /bin/bash tom-hanks -p 19002329
+RUN echo &#x27;tom-hanks:19002329&#x27; | chpasswd
+
+#設定 proxy 到 contain 的 rstudio
+RUN   echo &quot;http_proxy=&#x27;http://172.16.100.51:3128&#x27;&quot; &gt;&gt; /usr/local/lib/R/etc/Renviron
+RUN   echo &quot;https_proxy=&#x27;http://172.16.100.51:3128&#x27;&quot; &gt;&gt; /usr/local/lib/R/etc/Renviron
+
+#修改 repos 預設
+COPY Rprofile.site /usr/local/lib/R/etc/Rprofile.site
+
+#不能安裝 java，所以直接搬本機的過去
+COPY java /usr/java
+
+CMD [&quot;/init&quot;]</code></pre><p id="f7ef5ed7-b536-4c49-9cd4-58c622c7daa3" class="">
+</p><ul id="4ce242cc-dffc-4d97-9453-373e64fc15ea" class="bulleted-list"><li style="list-style-type:disc">這邊特別要題的是 <code>設定使用者</code>  <ul id="52adc558-a2a5-4dce-b56e-ac42169ae8f8" class="bulleted-list"><li style="list-style-type:circle">我要先去putty，查一下我在hadoop測試區裡面，tom-hanks的uid是多少。call <code>cat /etc/passwd</code> ，就會看到 tom-hanks 的 uid 是 1004</li></ul><ul id="46cadda4-690b-456e-96cd-6cdbd3d7e65d" class="bulleted-list"><li style="list-style-type:circle">所以，我在dockefile裡面，先去新增container裡面的user是1004，帳號密碼也設好，如以下： <code>RUN useradd -u 1004 -ms /bin/bash tom-hanks -p 19002329</code>  </li></ul><ul id="cd44af9e-c6d7-4b8c-8b95-b1e24701b6a1" class="bulleted-list"><li style="list-style-type:circle">然後加上網路上查的這組帳密寫法(原理我還不清楚) <code>RUN echo &#x27;tom-hanks:19002329&#x27; | chpasswd</code> </li></ul><ul id="fe68ca0a-683d-4657-aa26-877a327442e8" class="bulleted-list"><li style="list-style-type:circle">那這樣，我進到 container 裡面後，這個linux裡面就已經存在 tom-hanks 這個帳號了。</li></ul><ul id="6b762de7-c5f1-453f-adbd-2e96303e0a2a" class="bulleted-list"><li style="list-style-type:circle">至於為啥要設定這個。因為之後都會把container裡面的資料夾 mount 到測試區server中，這時候我在container裡寫的東西，他的預設權限都是 container 裡的 userid (uid)</li></ul><ul id="fe0e0f3a-15ac-4977-a94e-56dd47afb749" class="bulleted-list"><li style="list-style-type:circle">所以，我如果沒有去設定剛剛1004的這些東西，那預設的使用者是rstudio，他的uid是1000，那你就會在mount出來的hadoop測試區資料夾下，看到寫出來的東西的權限是1000，你完全無法從外部做更動了</li></ul><ul id="eee137d0-7e30-404c-a589-bc02bc053528" class="bulleted-list"><li style="list-style-type:circle">相反的，因為我現在有在container裡面設好uid了，寫出來的時候，就會是和本機一樣的 tom-hanks權限，這樣我就很好處理了</li></ul></li></ul><ul id="82f8f878-acbf-4b0c-b166-2897593768ef" class="bulleted-list"><li style="list-style-type:disc">也要提一下 <code>修改 repos 預設</code> <ul id="691acbbc-a516-4ddf-bf5f-6142f8cf59ab" class="bulleted-list"><li style="list-style-type:circle">repos 是告訴R要下載package時，要去哪下載。例如我們在 R console裡面打 <code>getOption(&quot;repos&quot;)</code>，就會show出預設的下載路徑：。但這個路徑會擋，所以我們想把這個路徑換到 <code>https://cloud.r-project.org</code>。</li></ul><ul id="b3345777-0de5-4200-8360-02e1150ed7eb" class="bulleted-list"><li style="list-style-type:circle">那作法就是，打開hadoop測試區裡的 <code>/usr/local/lib/R/etc/Rprofile.site</code> ，裡面長下圖這樣，我去改第一行就好</li></ul><pre id="a50515c0-0ce0-4be7-8f84-b79f9b9526c0" class="code"><code>options(repos = c(CRAN = &#x27;https://cloud.r-project.org&#x27;), download.file.method = &#x27;libcurl&#x27;)
+options(HTTPUserAgent = sprintf(&quot;R/%s R (%s)&quot;, getRversion(),
+                 paste(getRversion(), R.version$platform,
+                       R.version$arch, R.version$os)))</code></pre><ul id="cde3e06b-5e35-4588-a089-23f88bc60b96" class="bulleted-list"><li style="list-style-type:circle"> 然後我把這個改好的檔案，和dockerfile放在同一個資料夾。等等建image時，就把這個檔案，copy到container裡面的相同位置，取代掉原本的Rprofile.site，這樣就搞定了</li></ul></li></ul><h1 id="ed462e6c-68ba-4401-acf4-eb81744624fa" class="">4. 建立 image  </h1><ul id="6de78959-928b-4630-b7c9-a38d1c56d213" class="bulleted-list"><li style="list-style-type:disc">接下來就是去建立自己的image</li></ul><pre id="632bac02-6afb-4199-8564-0eab9a09d601" class="code"><code>cd /home/hadoop/EDSA/dockerR_Hank
+docker build -t tomhanks/tidymodels .</code></pre><h1 id="a09d2b65-d2eb-4f3c-851e-d919d27b67de" class="">optional: 先試跑一下</h1><ul id="26460e2f-e114-406b-ac55-d86f9d004b2b" class="bulleted-list"><li style="list-style-type:disc"> 我會先試跑一下，看一下 shared_package 的路徑和我想的一不一樣</li></ul><pre id="c2f61f9b-549b-4998-8156-ef2f8dc7ce67" class="code"><code>docker run --rm -p 8877:8787 tomhanks/tidymodels</code></pre><ul id="4596f1f8-e7ce-46ae-8756-3153a40b1224" class="bulleted-list"><li style="list-style-type:disc">然後登進去RStudio的console裡面，call `renv:::</li></ul><h1 id="4ea19d2e-7ccb-4cc5-8bf8-83f20f02fb6a" class="">5. 跑 image</h1><pre id="0ca6a320-b670-43ad-b2f4-818dbb953ae2" class="code"><code>docker run --privileged -ti --user root \
+-v /shared_package/v5/R-4.1/x86_64-pc-linux-gnu:/shared_package/v5/R-4.1/x86_64-pc-linux-gnu \
+-v /home/hadoop/docker_r_projects:/home/tom-hanks/docker_r_projects \
+-v /home/dmis-aaron:/home/dmis-aaron \
+-v /home/hadoop/EDSA/Def:/Def \
+-d -p 8877:8787 \
+tomhanks/tidymodels</code></pre><ul id="36c6bdc1-9c49-4d8e-82c4-18d091bf9387" class="bulleted-list"><li style="list-style-type:disc">這邊要注意幾點</li></ul><ul id="e3cb2806-4bce-44c8-9ad5-3db00e54e6b0" class="bulleted-list"><li style="list-style-type:disc">第一個 -v ，是去對應hadoop測試區的shared_package(因為image是灌R-4.0，所以要先去這個位置新增R-4.0的資料夾)，和container裡面的shared_package</li></ul><ul id="f8e43357-0ce1-46d2-becc-9162d478b90e" class="bulleted-list"><li style="list-style-type:disc">第二個 -v ，是我會把r project都放到docker_r_projects這個位子下，那在container裡面新增資料夾(e.g. 這邊的revenue)，就可以對回hadoop的資料夾，在container裡面做的事情，就都匯存出來了</li></ul><ul id="26d59d56-7676-46ad-acab-53c91777541e" class="bulleted-list"><li style="list-style-type:disc">-e HTTP_PROXY 這個應該不用寫了，因為寫在dockerfile裡面了</li></ul><h1 id="a1ef7b80-5304-4f61-a8b4-1c252896ae09" class="">Optional: 進到container裡面</h1><ul id="0d638c70-1f6a-4af1-85d0-2b69c7c47813" class="bulleted-list"><li style="list-style-type:disc">先用 <code>docker container ls</code> ，去找到正在 run 的 container id，e.g. <code>d8e79fe942b0</code>  </li></ul><ul id="cc25c2b2-f38f-4ef2-8b4d-ae91f49d1269" class="bulleted-list"><li style="list-style-type:disc">call <code>docker exec -i -t d8e79fe942b0 /bin/bash</code> 就近到這個container的bash裡面了</li></ul><ul id="79e9c693-81f1-4e58-a205-337337dca09f" class="bulleted-list"><li style="list-style-type:disc">此時的身分是 root ，所以要新增或刪除檔案都是無敵星星。</li></ul><p id="011e637e-058b-42f4-be05-8e6370f96d34" class="">
+</p></div></article></body></html>
